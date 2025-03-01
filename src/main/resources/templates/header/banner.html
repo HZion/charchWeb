@@ -1,0 +1,49 @@
+<div class="page-banner" th:style="'background-image: url(' + ${bannerImage} + ');'" style="background-image: url('/images/banner.jpg');">
+    <div class="banner-overlay">
+        <h1 class="banner-title" th:text="${pageTitle}">페이지 제목</h1>
+        <p class="banner-subtitle" th:text="${pageSubtitle}">페이지 부제목 또는 설명</p>
+    </div>
+</div>
+
+<style>
+    /* 배너 이미지 스타일 */
+    .page-banner {
+        width: 100%;
+        height: 250px;
+        position: relative;
+        background-size: cover;
+        background-position: center;
+        margin-top: 80px; /* 헤더 높이만큼 여백 */
+    }
+
+    .banner-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.5));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        color: white;
+        text-align: center;
+    }
+
+    .banner-title {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .banner-subtitle {
+        font-size: 1.2rem;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    }
+
+    /* 메인 콘텐츠 위치 조정 */
+    .main-content {
+        margin-top: 0; /* 배너 이미지가 들어가므로 여백 제거 */
+    }
+</style>

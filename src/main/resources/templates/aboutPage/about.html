@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>교회 소개 - 안디옥교회</title>
+    <link rel="stylesheet" href="/detailCommon.css">
+    <style>
+        /* 교회 소개 페이지 전용 스타일 */
+        .greeting-content img {
+            width: 100%;
+            max-width: 600px;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+
+        .pastor-card {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        .pastor-card img {
+            width: 150px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .mission-list {
+            list-style: none;
+        }
+
+        .mission-list li {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .location-map {
+            width: 100%;
+            height: 400px;
+            margin: 1rem 0;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{header/header.html}"></div>
+<div th:replace="~{header/banner.html}"></div>
+
+
+<div class="main-content">
+    <!-- 사이드바 템플릿 포함 -->
+    <div th:replace="~{sidebar/sidebar.html :: sidebar(section='about')}"></div>
+
+    <main class="content">
+        <!-- 현재 섹션에 해당하는 컨텐츠만 표시 -->
+        <div th:if="${currentMenu == 'greeting'}">
+            <h1>인사말</h1>
+            <img src="/api/placeholder/600/300" alt="교회 전경">
+            <p>안디옥교회를 방문해 주셔서 감사합니다...</p>
+            <p>우리 교회는 하나님의 말씀을 중심으로...</p>
+        </div>
+
+        <div th:if="${currentMenu == 'pastors'}">
+            <h1>섬기는 분들</h1>
+            <div class="pastor-card">
+                <img src="/api/placeholder/150/200" alt="담임목사">
+                <div>
+                    <h2>홍길동 담임목사</h2>
+                    <p>학력 및 경력...</p>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${currentMenu == 'mission'}">
+            <h1>후원 및 선교사/단체</h1>
+            <ul class="mission-list">
+                <li>
+                    <h3>아프리카 선교</h3>
+                    <p>케냐 나이로비 지역...</p>
+                </li>
+            </ul>
+        </div>
+
+        <div th:if="${currentMenu == 'location'}">
+            <h1>오시는 길</h1>
+            <div id="map"></div>
+            <h3>주소</h3>
+            <p>전라남도 해남군 풍혈길 300 안디옥교회</p>
+        </div>
+    </main>
+</div>
+
+<div th:replace="~{footer/footer.html}"></div>
+
+<!-- 카카오맵 스크립트는 location 페이지일 때만 로드 -->
+<script th:if="${currentMenu == 'location'}">
+    document.addEventListener("DOMContentLoaded", function() {
+        loadKakaoMap();
+    });
+
+    function initKakaoMap() {
+        const x = 34.4757991200096;
+        const y = 126.4754565643;
+
+        if (!document.getElementById("map")) return;
+
+        var container = document.getElementById("map");
+        container.style.height = '400px';
+
+        var options = {
+            center: new kakao.maps.LatLng(x, y),
+            level: 4
+        };
+
+        var map = new kakao.maps.Map(container, options);
+
+        var marker = new kakao.maps.Marker({
+            position: new kakao.maps.LatLng(x, y),
+            map: map
+        });
+    }
+
+    function loadKakaoMap() {
+        if (typeof kakao === 'undefined') {
+            var script = document.createElement("script");
+            script.src = "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=48a15f5614bae32727e5eb3d2e2c1f89";
+            script.onload = () => {
+                kakao.maps.load(() => {
+                    initKakaoMap();
+                });
+            };
+            document.head.appendChild(script);
+        } else {
+            initKakaoMap();
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!-- header/header.html -->
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="logo"> <a class="logo"  th:href="@{/}">안디옥교회</a></div>
+        <button class="mobile-menu-btn">☰</button>
+        <div class="mobile-menu">
+            <div class="accordion-menu">
+                <div class="menu-section" th:class="${currentPage == 'about'} ? 'menu-section active' : 'menu-section'">
+                    <div class="menu-header">
+                        <span>교회소개</span>
+                        <span class="arrow" th:text="${currentPage == 'about'} ? '▼' : '▶'"></span>
+                    </div>
+                    <div class="submenu">
+                        <a href="/about?menu=greeting">인사말</a>
+                        <a href="/about?menu=pastors">섬기는 분들</a>
+                        <a href="/about?menu=mission">후원 및 선교사</a>
+                        <a href="/about?menu=location">오시는 길</a>
+                    </div>
+                </div>
+                <div class="menu-section" th:class="${currentPage == 'worship'} ? 'menu-section active' : 'menu-section'">
+                    <div class="menu-header">
+                        <span>예배안내</span>
+                        <span class="arrow" th:text="${currentPage == 'worship'} ? '▼' : '▶'"></span>
+                    </div>
+                    <div class="submenu">
+                        <a href="/worship?menu=times">예배시간</a>
+                        <a href="/worship?menu=sunday">주일예배</a>
+                    </div>
+                </div>
+                <div class="menu-section" th:class="${currentPage == 'sermon'} ? 'menu-section active' : 'menu-section'">
+                    <div class="menu-header">
+                        <span>설교말씀</span>
+                        <span class="arrow" th:text="${currentPage == 'sermon'} ? '▼' : '▶'"></span>
+                    </div>
+                    <div class="submenu">
+                        <a href="/sermon?menu=recent">최근 설교</a>
+                        <a href="/sermon?menu=archive">설교 아카이브</a>
+                    </div>
+                </div>
+                <div class="menu-section" th:class="${currentPage == 'news'} ? 'menu-section active' : 'menu-section'">
+                    <div class="menu-header">
+                        <span>교회소식</span>
+                        <span class="arrow" th:text="${currentPage == 'news'} ? '▼' : '▶'"></span>
+                    </div>
+                    <div class="submenu">
+                        <a href="/news?menu=notice">공지사항</a>
+                        <a href="/news?menu=events">교회행사</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="#" th:href="@{/about}">교회소개</a>
+            <a href="#" th:href="@{/worship}">예배안내</a>
+            <a href="#" th:href="@{/sermon}">설교말씀</a>
+            <a href="#" th:href="@{/news}">교회소식</a>
+
+        </div>
+    </div>
+</nav>
+
+<style>
+    /* PC 화면에서는 모바일 메뉴 숨김 */
+    .mobile-menu {
+        display: none;
+    }
+
+    @media (max-width: 768px) {
+        .nav-links {
+            display: none;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 1000;
+            max-height: calc(100vh - 60px);
+            overflow-y: auto;
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .accordion-menu {
+            padding: 10px 0;
+        }
+
+        .menu-section {
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .menu-header {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 20px;
+            cursor: pointer;
+            background: white;
+            font-weight: 500;
+        }
+
+        .menu-header .arrow {
+            color: #666;
+        }
+
+        .submenu {
+            display: none;
+            background: #f8fafc;
+        }
+
+        .submenu.active {
+            display: block;
+        }
+
+        .submenu a {
+            display: block;
+            padding: 12px 30px;
+            color: #4b5563;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .submenu a:hover {
+            background: #e2e8f0;
+        }
+
+        /* 활성화된 메뉴 스타일 */
+        .menu-section.active .menu-header {
+            background: #1e40af;
+            color: white;
+        }
+
+        .menu-section.active .arrow {
+            color: white;
+        }
+    }
+</style>
+
+<script>
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const mobileMenu = document.querySelector('.mobile-menu');
+    const menuSections = document.querySelectorAll('.menu-section');
+
+    // 모바일 메뉴 토글
+    mobileMenuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('active');
+    });
+
+    // 각 섹션 헤더 클릭 이벤트
+    menuSections.forEach(section => {
+        const header = section.querySelector('.menu-header');
+        const arrow = header.querySelector('.arrow');
+        const submenu = section.querySelector('.submenu');
+
+        header.addEventListener('click', () => {
+            const isActive = section.classList.contains('active');
+
+            // 다른 모든 섹션 닫기
+            menuSections.forEach(s => {
+                s.classList.remove('active');
+                s.querySelector('.submenu').classList.remove('active');
+                s.querySelector('.arrow').textContent = '▶';
+            });
+
+            // 현재 섹션 토글
+            if (!isActive) {
+                section.classList.add('active');
+                submenu.classList.add('active');
+                arrow.textContent = '▼';
+            }
+        });
+    });
+
+    // 화면 스크롤 방지 (모바일 메뉴 열렸을 때)
+    mobileMenuBtn.addEventListener('click', () => {
+        document.body.style.overflow =
+            mobileMenu.classList.contains('active') ? 'hidden' : '';
+    });
+
+    // 모바일 메뉴 외부 클릭 시 닫기
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.mobile-menu') &&
+            !e.target.closest('.mobile-menu-btn') &&
+            mobileMenu.classList.contains('active')) {
+            mobileMenu.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+</script>

@@ -1,0 +1,157 @@
+<!-- admin/dashboard.html -->
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 대시보드 - 안디옥교회</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f3f4f6;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .admin-sidebar {
+            width: 250px;
+            background: #1e40af;
+            color: white;
+            padding: 1.5rem;
+            height: 100vh;
+            position: fixed;
+        }
+
+        .admin-header {
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .admin-menu {
+            list-style: none;
+        }
+
+        .admin-menu a {
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1rem;
+            display: block;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .admin-menu a:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .admin-menu a.active {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .admin-content {
+            margin-left: 250px;
+            padding: 2rem;
+            flex: 1;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .dashboard-card h3 {
+            color: #1e40af;
+            margin-bottom: 1rem;
+        }
+
+        .card-content {
+            font-size: 2rem;
+            color: #1f2937;
+            font-weight: bold;
+        }
+
+        .logout-btn {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 1.5rem;
+            right: 1.5rem;
+            padding: 0.75rem;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+    </style>
+</head>
+<body>
+<aside class="admin-sidebar">
+    <div class="admin-header">
+        <h1>관리자 페이지</h1>
+    </div>
+
+    <nav class="admin-menu">
+        <a href="/admin" class="active">대시보드</a>
+        <a href="/admin/worship">예배 관리</a>
+        <a href="/admin/sermon">설교 관리</a>
+        <a href="/admin/news">소식 관리</a>
+        <a href="/admin/settings">설정</a>
+    </nav>
+
+    <form th:action="@{/admin/logout}" method="post">
+        <button type="submit" class="logout-btn">로그아웃</button>
+    </form>
+</aside>
+
+<main class="admin-content">
+    <h2>대시보드</h2>
+
+    <div class="dashboard-grid">
+        <div class="dashboard-card">
+            <h3>최근 예배 영상</h3>
+            <div class="card-content">12</div>
+        </div>
+        <div class="dashboard-card">
+            <h3>공지사항</h3>
+            <div class="card-content">25</div>
+        </div>
+        <div class="dashboard-card">
+            <h3>교회행사</h3>
+            <div class="card-content">8</div>
+        </div>
+    </div>
+
+    <div class="dashboard-grid">
+        <div class="dashboard-card">
+            <h3>최근 활동</h3>
+            <ul>
+                <li>새로운 예배 영상 업로드</li>
+                <li>공지사항 수정</li>
+                <li>교회행사 추가</li>
+            </ul>
+        </div>
+    </div>
+</main>
+</body>
+</html>

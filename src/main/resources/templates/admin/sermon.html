@@ -1,0 +1,289 @@
+<!-- admin/sermon-form.html -->
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${sermon.id == null ? '새 설교 추가' : '설교 수정'} + ' - 안디옥교회'">설교 추가/수정 - 안디옥교회</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f3f4f6;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .admin-sidebar {
+            width: 250px;
+            background: #1e40af;
+            color: white;
+            padding: 1.5rem;
+            height: 100vh;
+            position: fixed;
+        }
+
+        .admin-header {
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .admin-menu {
+            list-style: none;
+        }
+
+        .admin-menu a {
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1rem;
+            display: block;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .admin-menu a:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .admin-menu a.active {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .admin-content {
+            margin-left: 250px;
+            padding: 2rem;
+            flex: 1;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            background: #1e40af;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-cancel {
+            background: #9ca3af;
+        }
+
+        .btn-cancel:hover {
+            background: #6b7280;
+        }
+
+        .form-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #4b5563;
+        }
+
+        .form-control {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            background: #f9fafb;
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #93c5fd;
+            box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.5);
+        }
+
+        textarea.form-control {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .thumbnail-preview {
+            margin-top: 1rem;
+            max-width: 300px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .thumbnail-preview img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .logout-btn {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 1.5rem;
+            right: 1.5rem;
+            padding: 0.75rem;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+    </style>
+</head>
+<body>
+<aside class="admin-sidebar">
+    <div class="admin-header">
+        <h1>관리자 페이지</h1>
+    </div>
+
+    <nav class="admin-menu">
+        <a href="/admin">대시보드</a>
+        <a href="/admin/worship">예배 관리</a>
+        <a href="/admin/sermon" class="active">설교 관리</a>
+        <a href="/admin/news">소식 관리</a>
+        <a href="/admin/settings">설정</a>
+    </nav>
+
+    <form th:action="@{/admin/logout}" method="post">
+        <button type="submit" class="logout-btn">로그아웃</button>
+    </form>
+</aside>
+
+<main class="admin-content">
+    <div class="page-header">
+        <h2 th:text="${sermon.id == null ? '새 설교 추가' : '설교 수정'}">설교 추가/수정</h2>
+    </div>
+
+    <div class="form-card">
+        <form th:action="@{/admin/sermon/save}" method="post" enctype="multipart/form-data" th:object="${sermon}">
+            <!-- 수정 시 ID 유지 -->
+            <input type="hidden" th:field="*{id}" />
+
+            <!-- 썸네일 URL 유지 -->
+            <input type="hidden" th:field="*{thumbnailUrl}" />
+
+            <div class="form-group">
+                <label for="title">제목</label>
+                <input type="text" class="form-control" id="title" th:field="*{title}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="preacher">설교자</label>
+                <input type="text" class="form-control" id="preacher" th:field="*{preacher}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="bibleVerse">성경구절</label>
+                <input type="text" class="form-control" id="bibleVerse" th:field="*{bibleVerse}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="date">날짜</label>
+                <input type="date" class="form-control" id="date" th:field="*{date}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="thumbnail">썸네일 이미지</label>
+                <input type="file" class="form-control" id="thumbnail" name="thumbnail" accept="image/*">
+
+                <!-- 기존 썸네일 미리보기 (수정 시) -->
+                <div class="thumbnail-preview" th:if="*{thumbnailUrl != null}">
+                    <p>현재 썸네일:</p>
+                    <img th:src="*{thumbnailUrl}" alt="썸네일 미리보기">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="content">본문</label>
+                <textarea class="form-control" id="content" th:field="*{content}" required></textarea>
+            </div>
+
+            <div class="form-actions">
+                <a href="/admin/sermon" class="btn btn-cancel">취소</a>
+                <button type="submit" class="btn">저장</button>
+            </div>
+        </form>
+    </div>
+</main>
+
+<script>
+    // 날짜 필드 현재 날짜로 기본값 설정 (새 설교인 경우)
+    document.addEventListener('DOMContentLoaded', function() {
+        const dateField = document.getElementById('date');
+        if (!dateField.value) {
+            const today = new Date();
+            const year = today.getFullYear();
+            let month = today.getMonth() + 1;
+            let day = today.getDate();
+
+            month = month < 10 ? '0' + month : month;
+            day = day < 10 ? '0' + day : day;
+
+            dateField.value = `${year}-${month}-${day}`;
+        }
+    });
+
+    // 썸네일 미리보기
+    document.getElementById('thumbnail').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                let previewDiv = document.querySelector('.thumbnail-preview');
+
+                if (!previewDiv) {
+                    previewDiv = document.createElement('div');
+                    previewDiv.className = 'thumbnail-preview';
+                    event.target.parentNode.appendChild(previewDiv);
+                }
+
+                previewDiv.innerHTML = `
+                    <p>새 썸네일 미리보기:</p>
+                    <img src="${e.target.result}" alt="썸네일 미리보기">
+                `;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+</body>
+</html>

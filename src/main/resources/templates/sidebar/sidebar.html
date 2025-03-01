@@ -1,0 +1,10 @@
+<!-- /resources/templates/sidebar/sidebar.html -->
+<aside class="sidebar" th:fragment="sidebar">
+  <h2 th:text="${sectionTitle}">섹션 제목</h2>
+  <nav class="sidebar-nav">
+    <a th:each="menu : ${subMenus}"
+       th:href="${menu.url}"
+       th:text="${menu.title}"
+       th:class="${menu.active} ? 'active' : ''">메뉴 항목</a>
+  </nav>
+</aside>
