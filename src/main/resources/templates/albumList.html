@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>교회앨범 - 안디옥교회</title>
+    <link rel="stylesheet" href="/detailCommon.css">
+    <style>
+        /* 갤러리 페이지 전용 스타일 */
+        .gallery-container {
+            margin-top: 2rem;
+        }
+
+        .gallery-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        .filter-select {
+            padding: 0.6rem 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            background: white;
+            min-width: 120px;
+        }
+
+        .album-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .album-card {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background: white;
+            transition: transform 0.3s, box-shadow 0.3s;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .album-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        .album-thumbnail {
+            position: relative;
+            padding-top: 75%; /* 4:3 비율 */
+            overflow: hidden;
+        }
+
+        .album-thumbnail img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .album-card:hover .album-thumbnail img {
+            transform: scale(1.05);
+        }
+
+        .album-info {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .album-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .album-meta {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .album-description {
+            color: #4b5563;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+
+        .album-link {
+            display: inline-block;
+            padding: 0.6rem 1.2rem;
+            background: #1e40af;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: background 0.2s;
+            text-align: center;
+        }
+
+        .album-link:hover {
+            background: #1d4ed8;
+        }
+
+        .no-albums {
+            text-align: center;
+            padding: 3rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            color: #6b7280;
+        }
+
+        /* 페이지네이션 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 0.4rem;
+            margin-top: 2rem;
+        }
+
+        .pagination li {
+            margin: 0;
+        }
+
+        .pagination a,
+        .pagination span {
+            display: block;
+            padding: 0.6rem 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            color: #4b5563;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .pagination a:hover {
+            background: #f8fafc;
+            border-color: #d1d5db;
+        }
+
+        .pagination li.active a {
+            background: #1e40af;
+            color: white;
+            border-color: #1e40af;
+        }
+
+        .pagination li.disabled span {
+            color: #d1d5db;
+            cursor: not-allowed;
+        }
+
+        /* 사진 카운트 배지 */
+        .photo-count {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .photo-count svg {
+            width: 14px;
+            height: 14px;
+        }
+    </style>
+</head>
+<body>
+
+
+<div class="main-content">
+    <!-- 사이드바 템플릿 포함 -->
+    <div th:replace="~{sidebar/sidebar.html :: sidebar(section='news')}"></div>
+
+    <main class="content">
+        <h1>교회앨범</h1>
+
+        <!-- 필터 영역 -->
+        <div class="gallery-filters">
+            <select class="filter-select" id="yearFilter" onchange="applyFilters()">
+                <option value="">전체 연도</option>
+                <option th:each="year : ${years}" th:value="${year}" th:text="${year + '년'}"
+                        th:selected="${selectedYear == year}">2024년</option>
+            </select>
+
+            <select class="filter-select" id="monthFilter" onchange="applyFilters()">
+                <option value="">전체 월</option>
+                <option th:each="month : ${#numbers.sequence(1, 12)}" th:value="${month}"
+                        th:text="${month + '월'}" th:selected="${selectedMonth == month}">1월</option>
+            </select>
+
+            <select class="filter-select" id="categoryFilter" onchange="applyFilters()">
+                <option value="">전체 카테고리</option>
+                <option th:each="category : ${categories}" th:value="${category}"
+                        th:text="${category}" th:selected="${selectedCategory == category}">예배</option>
+            </select>
+        </div>
+
+        <!-- 앨범 그리드 -->
+        <div class="gallery-container">
+            <div class="album-grid" th:if="${not #lists.isEmpty(albums)}">
+                <div class="album-card" th:each="album : ${albums}">
+                    <a th:href="@{/news/album/{id}(id=${album.id})}" class="album-thumbnail">
+                        <img th:src="${album.thumbnailUrl}" alt="앨범 썸네일">
+                        <div class="photo-count">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="2" width="16" height="16" rx="2" ry="2"></rect>
+                                <rect x="6" y="6" width="16" height="16" rx="2" ry="2"></rect>
+                            </svg>
+                            <span th:text="${album.photos.size}">24</span>
+                        </div>
+                    </a>
+                    <div class="album-info">
+                        <h3 class="album-title" th:text="${album.title}">2024 신년 예배</h3>
+                        <div class="album-meta">
+                            <span th:text="${#temporals.format(album.eventDate, 'yyyy년 MM월 dd일')}">2024년 1월 1일</span>
+                            <span th:if="${album.category != null}" th:text="' | ' + ${album.category}"> | 예배</span>
+                        </div>
+                        <p class="album-description" th:text="${album.description}">
+                            2024년 신년 예배 및 축하 행사 사진입니다.
+                        </p>
+                        <a th:href="@{/news/album/{id}(id=${album.id})}" class="album-link">자세히 보기</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 앨범이 없을 경우 -->
+            <div class="no-albums" th:if="${#lists.isEmpty(albums)}">
+                <p>등록된 앨범이 없습니다.</p>
+            </div>
+
+            <!-- 페이지네이션 -->
+            <ul class="pagination" th:if="${albums.totalPages > 1}">
+                <!-- 이전 버튼 -->
+                <li th:class="${albums.first ? 'disabled' : ''}">
+                    <a th:if="${!albums.first}"
+                       th:href="@{/news(page=${albums.number - 1}, size=${albums.size}, year=${selectedYear}, month=${selectedMonth}, category=${selectedCategory})}">
+                        &laquo;
+                    </a>
+                    <span th:if="${albums.first}">&laquo;</span>
+                </li>
+
+                <!-- 페이지 번호 -->
+                <li th:each="i : ${#numbers.sequence(0, albums.totalPages - 1)}"
+                    th:if="${i >= albums.number - 2 and i <= albums.number + 2}"
+                    th:class="${i == albums.number ? 'active' : ''}">
+                    <a th:href="@{/news(page=${i}, size=${albums.size}, year=${selectedYear}, month=${selectedMonth}, category=${selectedCategory})}"
+                       th:text="${i + 1}">1</a>
+                </li>
+
+                <!-- 다음 버튼 -->
+                <li th:class="${albums.last ? 'disabled' : ''}">
+                    <a th:if="${!albums.last}"
+                       th:href="@{/news(page=${albums.number + 1}, size=${albums.size}, year=${selectedYear}, month=${selectedMonth}, category=${selectedCategory})}">
+                        &raquo;
+                    </a>
+                    <span th:if="${albums.last}">&raquo;</span>
+                </li>
+            </ul>
+        </div>
+    </main>
+</div>
+
+<div th:replace="~{footer/footer.html}"></div>
+
+<script>
+    // 필터 적용 함수
+    function applyFilters() {
+        const year = document.getElementById('yearFilter').value;
+        const month = document.getElementById('monthFilter').value;
+        const category = document.getElementById('categoryFilter').value;
+
+        window.location.href = `/news?year=${year}&month=${month}&category=${category}`;
+    }
+</script>
+</body>
+</html>

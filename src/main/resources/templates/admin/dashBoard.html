@@ -106,23 +106,8 @@
     </style>
 </head>
 <body>
-<aside class="admin-sidebar">
-    <div class="admin-header">
-        <h1>관리자 페이지</h1>
-    </div>
 
-    <nav class="admin-menu">
-        <a href="/admin" class="active">대시보드</a>
-        <a href="/admin/worship">예배 관리</a>
-        <a href="/admin/sermon">설교 관리</a>
-        <a href="/admin/news">소식 관리</a>
-        <a href="/admin/settings">설정</a>
-    </nav>
-
-    <form th:action="@{/admin/logout}" method="post">
-        <button type="submit" class="logout-btn">로그아웃</button>
-    </form>
-</aside>
+<div th:replace="~{sidebar/andioSidebar.html}"></div>
 
 <main class="admin-content">
     <h2>대시보드</h2>

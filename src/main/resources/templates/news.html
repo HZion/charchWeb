@@ -210,6 +210,526 @@
         }
     </style>
 </head>
+<style>
+    /* 공지사항 페이지 공통 스타일 */
+    .content h1 {
+        margin-bottom: 1.5rem;
+        color: #1e40af;
+        font-size: 2rem;
+        font-weight: 600;
+        position: relative;
+        padding-bottom: 0.75rem;
+    }
+
+    .content h1::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background-color: #1e40af;
+    }
+
+    /* 검색 영역 스타일 개선 */
+    .search-section {
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        background: #f8fafc;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        border: 1px solid #e5e7eb;
+    }
+
+    .search-form {
+        display: flex;
+        gap: 0.75rem;
+        max-width: 600px;
+    }
+
+    .search-input {
+        flex: 1;
+        padding: 0.75rem 1rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        font-size: 1rem;
+        transition: all 0.2s;
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: #1e40af;
+        box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+    }
+
+    .search-button {
+        padding: 0.75rem 1.5rem;
+        background: #1e40af;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .search-button:hover {
+        background: #1d4ed8;
+    }
+
+    .search-button svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    /* 최신 공지사항 카드 스타일 개선 */
+    .featured-notice {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        margin-bottom: 2.5rem;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        border: 1px solid #e5e7eb;
+        position: relative;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .featured-notice:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+
+    .notice-badge {
+        position: absolute;
+        top: 1.25rem;
+        right: 1.25rem;
+        background-color: #dc2626;
+        color: white;
+        padding: 0.35rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        z-index: 10;
+    }
+
+    .notice-content {
+        padding: 2rem;
+    }
+
+    .notice-date {
+        color: #6b7280;
+        font-size: 0.95rem;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .notice-date svg {
+        width: 16px;
+        height: 16px;
+        color: #6b7280;
+    }
+
+    .notice-title {
+        color: #1f2937;
+        font-size: 1.6rem;
+        margin-bottom: 1.25rem;
+        font-weight: 600;
+        line-height: 1.3;
+    }
+
+    .notice-excerpt {
+        color: #4b5563;
+        line-height: 1.7;
+        margin-bottom: 1.5rem;
+        font-size: 1.05rem;
+    }
+
+    .notice-more {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.25rem;
+        background-color: #1e40af;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: background-color 0.2s;
+    }
+
+    .notice-more:hover {
+        background-color: #1d4ed8;
+    }
+
+    .notice-more svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    /* 공지사항 테이블 스타일 개선 */
+    .notice-section-title {
+        font-size: 1.4rem;
+        color: #1f2937;
+        margin-bottom: 1.25rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .notice-section-title svg {
+        width: 22px;
+        height: 22px;
+        color: #1e40af;
+    }
+
+    .notice-table-container {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        margin-bottom: 2.5rem;
+        border: 1px solid #e5e7eb;
+    }
+
+    .notice-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .notice-table th,
+    .notice-table td {
+        padding: 1.25rem 1rem;
+        text-align: left;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .notice-table th {
+        background: #f8fafc;
+        font-weight: 600;
+        color: #1f2937;
+        position: relative;
+    }
+
+    .notice-table th::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 25%;
+        height: 50%;
+        width: 1px;
+        background-color: #e5e7eb;
+    }
+
+    .notice-table th:last-child::after {
+        display: none;
+    }
+
+    .notice-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .notice-table tr {
+        transition: background-color 0.2s;
+    }
+
+    .notice-table tr:hover {
+        background: #f9fafb;
+    }
+
+    .notice-table .pinned {
+        background: #f8fafc;
+    }
+
+    .notice-table .pinned:hover {
+        background: #f1f5f9;
+    }
+
+    .notice-table .pin-badge {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        background-color: #dc2626;
+        color: white;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .notice-title-cell a {
+        color: #1f2937;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s;
+        display: flex;
+        align-items: center;
+    }
+
+    .notice-title-cell a:hover {
+        color: #1e40af;
+    }
+
+    .attachment-icon {
+        display: inline-flex;
+        margin-left: 8px;
+    }
+
+    .attachment-icon svg {
+        width: 16px;
+        height: 16px;
+        color: #6b7280;
+    }
+
+    /* 페이지네이션 스타일 개선 */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        list-style: none;
+        gap: 0.5rem;
+        margin-top: 2.5rem;
+    }
+
+    .pagination li {
+        margin: 0;
+    }
+
+    .pagination a,
+    .pagination span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        color: #4b5563;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .pagination a:hover {
+        background: #f8fafc;
+        border-color: #cbd5e1;
+    }
+
+    .pagination li.active a {
+        background: #1e40af;
+        color: white;
+        border-color: #1e40af;
+    }
+
+    .pagination li.disabled span {
+        color: #d1d5db;
+        cursor: not-allowed;
+    }
+
+    /* 반응형 조정 */
+    @media (max-width: 768px) {
+        .notice-table th:nth-child(1),
+        .notice-table td:nth-child(1),
+        .notice-table th:nth-child(4),
+        .notice-table td:nth-child(4) {
+            display: none; /* 모바일에서는 번호, 조회수 컬럼 숨김 */
+        }
+
+        .notice-table th:nth-child(3),
+        .notice-table td:nth-child(3) {
+            width: 30%;
+        }
+
+        .notice-title {
+            font-size: 1.4rem;
+        }
+
+        .notice-section-title {
+            font-size: 1.25rem;
+        }
+    }
+    /* 앨범 목록 페이지 스타일 */
+    .gallery-container {
+        margin-top: 2rem;
+    }
+
+    .gallery-filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        padding: 1rem;
+        background: #f8fafc;
+        border-radius: 8px;
+    }
+
+    .filter-select {
+        padding: 0.6rem 1rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        background: white;
+        min-width: 120px;
+    }
+
+    .album-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
+
+    .album-card {
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        background: white;
+        transition: transform 0.3s, box-shadow 0.3s;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .album-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+
+    .album-thumbnail {
+        position: relative;
+        padding-top: 75%; /* 4:3 비율 */
+        overflow: hidden;
+        display: block;
+    }
+
+    .album-thumbnail img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s;
+    }
+
+    .album-card:hover .album-thumbnail img {
+        transform: scale(1.05);
+    }
+
+    .album-info {
+        padding: 1.5rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .album-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 0.5rem;
+        line-height: 1.4;
+    }
+
+    .album-meta {
+        color: #6b7280;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+
+    .album-description {
+        color: #4b5563;
+        font-size: 0.95rem;
+        margin-bottom: 1rem;
+        line-height: 1.5;
+        flex-grow: 1;
+    }
+
+    .album-link {
+        display: inline-block;
+        padding: 0.6rem 1.2rem;
+        background: #1e40af;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: background 0.2s;
+        text-align: center;
+    }
+
+    .album-link:hover {
+        background: #1d4ed8;
+    }
+
+    .no-albums {
+        text-align: center;
+        padding: 3rem;
+        background: #f8fafc;
+        border-radius: 8px;
+        color: #6b7280;
+    }
+
+    /* 페이지네이션 */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        list-style: none;
+        gap: 0.4rem;
+        margin-top: 2rem;
+    }
+
+    .pagination li {
+        margin: 0;
+    }
+
+    .pagination a,
+    .pagination span {
+        display: block;
+        padding: 0.6rem 1rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        color: #4b5563;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .pagination a:hover {
+        background: #f8fafc;
+        border-color: #d1d5db;
+    }
+
+    .pagination li.active a {
+        background: #1e40af;
+        color: white;
+        border-color: #1e40af;
+    }
+
+    .pagination li.disabled span {
+        color: #d1d5db;
+        cursor: not-allowed;
+    }
+
+    /* 사진 카운트 배지 */
+    .photo-count {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(0, 0, 0, 0.6);
+        color: white;
+        padding: 0.3rem 0.6rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .photo-count svg {
+        width: 14px;
+        height: 14px;
+    }
+</style>
 <body>
 <div th:replace="~{header/header.html}"></div>
 <div th:replace="~{header/banner.html}"></div>
@@ -222,36 +742,146 @@
         <div th:if="${currentMenu == 'notice'}">
             <h1>공지사항</h1>
 
+            <!-- 검색 영역 -->
             <div class="search-section">
-                <form class="search-form">
-                    <input type="text" class="search-input" placeholder="공지사항 검색...">
-                    <button type="submit" class="search-button">검색</button>
+                <form class="search-form" th:action="@{/news}" method="get">
+                    <input type="hidden" name="menu" value="notice">
+                    <input type="text" name="keyword" class="search-input" placeholder="공지사항 검색..." th:value="${keyword}">
+                    <button type="submit" class="search-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        검색
+                    </button>
                 </form>
             </div>
 
-            <!-- 대표 공지사항 -->
-            <div class="news-card">
-                <div class="news-preview">
-                    <img src="/api/placeholder/800/450" alt="대표 공지사항">
-                </div>
-                <div class="news-content">
-                    <p class="news-date">2024년 2월 21일</p>
-                    <h2 class="news-title">2024년 새가족 교육 안내</h2>
-                    <p class="news-text">새가족 교육이 다음과 같이 진행됩니다. 많은 참여 부탁드립니다.</p>
+            <!-- 최신/대표 공지사항 -->
+            <div class="featured-notice" th:if="${featuredNotice != null}">
+                <div class="notice-badge" th:if="${featuredNotice.pinned}">공지</div>
+                <div class="notice-content">
+                    <p class="notice-date">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        <span th:text="${#temporals.format(featuredNotice.createdAt, 'yyyy년 MM월 dd일')}">2024년 2월 21일</span>
+                    </p>
+                    <h2 class="notice-title" th:text="${featuredNotice.title}">2024년 새가족 교육 안내</h2>
+                    <div class="notice-excerpt" th:utext="${#strings.abbreviate(#strings.replace(featuredNotice.content, '<[^>]*>', ''), 200)}">
+                        새가족 교육이 다음과 같이 진행됩니다. 많은 참여 부탁드립니다.
+                    </div>
+                    <a th:href="@{/news/notice/{id}(id=${featuredNotice.id})}" class="notice-more">
+                        자세히 보기
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
                 </div>
             </div>
 
-            <!-- 공지사항 목록 -->
-            <div class="notice-list">
-                <div class="notice-item">
-                    <img src="/api/placeholder/400/300" alt="공지사항 이미지">
-                    <div class="notice-item-content">
-                        <div class="notice-item-title">3월 성찬식 안내</div>
-                        <div class="notice-item-info">2024.02.15</div>
-                    </div>
-                </div>
-                <!-- 추가 공지사항 아이템 -->
+            <!-- 공지사항 목록 테이블 제목 -->
+            <h2 class="notice-section-title">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                공지사항 목록
+            </h2>
+
+            <!-- 공지사항 목록 테이블 -->
+            <div class="notice-table-container">
+                <table class="notice-table">
+                    <thead>
+                    <tr>
+                        <th width="10%">번호</th>
+                        <th width="55%">제목</th>
+                        <th width="20%">등록일</th>
+                        <th width="15%">조회수</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- 상단 고정 공지 -->
+                    <tr th:each="notice : ${pinnedNotices}" class="pinned">
+                        <td>
+                            <span class="pin-badge">공지</span>
+                        </td>
+                        <td class="notice-title-cell">
+                            <a th:href="@{/news/notice/{id}(id=${notice.id})}">
+                                <span th:text="${notice.title}">2024년 새가족 교육 안내</span>
+                                <span class="attachment-icon" th:if="${notice.isHasAttachment()}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
+                                    </svg>
+                                </span>
+                            </a>
+                        </td>
+                        <td th:text="${#temporals.format(notice.createdAt, 'yyyy.MM.dd')}">2024.02.21</td>
+                        <td th:text="${notice.viewCount}">245</td>
+                    </tr>
+
+                    <!-- 일반 공지사항 목록 -->
+                    <tr th:each="notice, status : ${noticePage.content}" th:unless="${notice.pinned}">
+                        <td th:text="${noticePage.totalElements - (noticePage.number * noticePage.size) - status.index}">1</td>
+                        <td class="notice-title-cell">
+                            <a th:href="@{/news/notice/{id}(id=${notice.id})}">
+                                <span th:text="${notice.title}">3월 성찬식 안내</span>
+                                <span class="attachment-icon" th:if="${notice.isHasAttachment()}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
+                                    </svg>
+                                </span>
+                            </a>
+                        </td>
+                        <td th:text="${#temporals.format(notice.createdAt, 'yyyy.MM.dd')}">2024.02.15</td>
+                        <td th:text="${notice.viewCount}">123</td>
+                    </tr>
+
+                    <!-- 공지사항이 없을 경우 -->
+                    <tr th:if="${noticePage.empty && (pinnedNotices == null || pinnedNotices.empty)}">
+                        <td colspan="4" style="text-align: center; padding: 2.5rem; color: #6b7280;">
+                            등록된 공지사항이 없습니다.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
+
+            <!-- 페이지네이션 -->
+            <ul class="pagination" th:if="${noticePage.totalPages > 1}">
+                <!-- 이전 버튼 -->
+                <li th:class="${noticePage.first ? 'disabled' : ''}">
+                    <a th:if="${!noticePage.first}"
+                       th:href="@{/news(menu='notice', page=${noticePage.number - 1}, keyword=${keyword})}">
+                        &laquo;
+                    </a>
+                    <span th:if="${noticePage.first}">&laquo;</span>
+                </li>
+
+                <!-- 페이지 번호 -->
+                <li th:each="i : ${#numbers.sequence(0, noticePage.totalPages - 1)}"
+                    th:if="${i >= noticePage.number - 2 and i <= noticePage.number + 2}"
+                    th:class="${i == noticePage.number ? 'active' : ''}">
+                    <a th:href="@{/news(menu='notice', page=${i}, keyword=${keyword})}"
+                       th:text="${i + 1}">1</a>
+                </li>
+
+                <!-- 다음 버튼 -->
+                <li th:class="${noticePage.last ? 'disabled' : ''}">
+                    <a th:if="${!noticePage.last}"
+                       th:href="@{/news(menu='notice', page=${noticePage.number + 1}, keyword=${keyword})}">
+                        &raquo;
+                    </a>
+                    <span th:if="${noticePage.last}">&raquo;</span>
+                </li>
+            </ul>
         </div>
 
         <!-- 교회행사 -->
@@ -272,23 +902,99 @@
         </div>
 
         <!-- 교회앨범 -->
+        <!-- 교회앨범 -->
         <div th:if="${currentMenu == 'gallery'}">
             <h1>교회앨범</h1>
 
-            <div class="gallery-grid">
-                <div class="gallery-item">
-                    <img src="/api/placeholder/400/400" alt="앨범 이미지" class="gallery-image">
-                    <div class="gallery-overlay">
-                        <h3>2024 새해맞이 예배</h3>
-                        <p>2024.01.01</p>
+            <!-- 필터 영역 추가 -->
+            <div class="gallery-filters">
+                <select class="filter-select" id="yearFilter" onchange="applyFilters()">
+                    <option value="">전체 연도</option>
+                    <option th:each="year : ${years}" th:value="${year}" th:text="${year + '년'}"
+                            th:selected="${selectedYear == year}">2024년</option>
+                </select>
+
+                <select class="filter-select" id="monthFilter" onchange="applyFilters()">
+                    <option value="">전체 월</option>
+                    <option th:each="month : ${#numbers.sequence(1, 12)}" th:value="${month}"
+                            th:text="${month + '월'}" th:selected="${selectedMonth == month}">1월</option>
+                </select>
+
+                <select class="filter-select" id="categoryFilter" onchange="applyFilters()">
+                    <option value="">전체 카테고리</option>
+                    <option th:each="category : ${categories}" th:value="${category}"
+                            th:text="${category}" th:selected="${selectedCategory == category}">예배</option>
+                </select>
+            </div>
+
+            <!-- 앨범 그리드 -->
+            <div class="album-grid" th:if="${albums != null && !albums.empty}">
+                <div class="album-card" th:each="album : ${albums}">
+                    <a th:href="@{/news/album/{id}(id=${album.id})}" class="album-thumbnail">
+                        <img th:src="${album.thumbnailUrl != null ? album.thumbnailUrl : '/api/placeholder/300/225'}" alt="앨범 썸네일">
+                    </a>
+                    <div class="album-info">
+                        <h3 class="album-title" th:text="${album.title}">앨범 제목</h3>
+                        <div class="album-meta">
+                            <span th:text="${#temporals.format(album.eventDate, 'yyyy년 MM월 dd일')}">날짜</span>
+                            <span th:if="${album.category != null}" th:text="' | ' + ${album.category}">카테고리</span>
+                        </div>
+                        <p class="album-description" th:text="${album.description}">앨범 설명</p>
+                        <a th:href="@{/news/album/{id}(id=${album.id})}" class="album-link">자세히 보기</a>
                     </div>
                 </div>
-                <!-- 추가 갤러리 아이템 -->
             </div>
+
+            <!-- 앨범이 없을 경우 -->
+            <div class="no-albums" th:if="${albums == null || albums.empty}">
+                <p>등록된 앨범이 없습니다.</p>
+            </div>
+
+            <!-- 페이지네이션 -->
+            <ul class="pagination" th:if="${albums != null && albums.totalPages > 1}">
+                <!-- 이전 버튼 -->
+                <li th:class="${albums.first ? 'disabled' : ''}">
+                    <a th:if="${!albums.first}"
+                       th:href="@{/news(menu='gallery', page=${albums.number - 1}, size=${albums.size}, year=${selectedYear}, month=${selectedMonth}, category=${selectedCategory})}">
+                        &laquo;
+                    </a>
+                    <span th:if="${albums.first}">&laquo;</span>
+                </li>
+
+                <!-- 페이지 번호 -->
+                <li th:each="i : ${#numbers.sequence(0, albums.totalPages - 1)}"
+                    th:if="${i >= albums.number - 2 and i <= albums.number + 2}"
+                    th:class="${i == albums.number ? 'active' : ''}">
+                    <a th:href="@{/news(menu='gallery', page=${i}, size=${albums.size}, year=${selectedYear}, month=${selectedMonth}, category=${selectedCategory})}"
+                       th:text="${i + 1}">1</a>
+                </li>
+
+                <!-- 다음 버튼 -->
+                <li th:class="${albums.last ? 'disabled' : ''}">
+                    <a th:if="${!albums.last}"
+                       th:href="@{/news(menu='gallery', page=${albums.number + 1}, size=${albums.size}, year=${selectedYear}, month=${selectedMonth}, category=${selectedCategory})}">
+                        &raquo;
+                    </a>
+                    <span th:if="${albums.last}">&raquo;</span>
+                </li>
+            </ul>
+
+            <!-- 필터 적용 스크립트 -->
+
         </div>
     </main>
 </div>
 
 <div th:replace="~{footer/footer.html}"></div>
 </body>
+
+<script>
+    function applyFilters() {
+        const year = document.getElementById('yearFilter').value;
+        const month = document.getElementById('monthFilter').value;
+        const category = document.getElementById('categoryFilter').value;
+
+        window.location.href = `/news?menu=gallery&year=${year}&month=${month}&category=${category}`;
+    }
+</script>
 </html>

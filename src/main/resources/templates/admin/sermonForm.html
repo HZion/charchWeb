@@ -1,4 +1,4 @@
-<!-- admin/sermon-form.html -->
+<!-- andio/sermon-form.html -->
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -19,7 +19,7 @@
             display: flex;
         }
 
-        .admin-sidebar {
+        .andio-sidebar {
             width: 250px;
             background: #1e40af;
             color: white;
@@ -28,17 +28,17 @@
             position: fixed;
         }
 
-        .admin-header {
+        .andio-header {
             padding-bottom: 1.5rem;
             margin-bottom: 1.5rem;
             border-bottom: 1px solid rgba(255,255,255,0.2);
         }
 
-        .admin-menu {
+        .andio-menu {
             list-style: none;
         }
 
-        .admin-menu a {
+        .andio-menu a {
             color: white;
             text-decoration: none;
             padding: 0.75rem 1rem;
@@ -47,15 +47,15 @@
             transition: background 0.3s;
         }
 
-        .admin-menu a:hover {
+        .andio-menu a:hover {
             background: rgba(255,255,255,0.1);
         }
 
-        .admin-menu a.active {
+        .andio-menu a.active {
             background: rgba(255,255,255,0.2);
         }
 
-        .admin-content {
+        .andio-content {
             margin-left: 250px;
             padding: 2rem;
             flex: 1;
@@ -150,6 +150,52 @@
             display: block;
         }
 
+        .current-thumbnail {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+        }
+
+        .current-thumbnail img {
+            max-width: 300px;
+            margin-top: 0.5rem;
+            border-radius: 4px;
+        }
+
+        .new-thumbnail {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 4px;
+        }
+
+        .new-thumbnail img {
+            max-width: 300px;
+            margin-top: 0.5rem;
+            border-radius: 4px;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+            border-radius: 9999px;
+            margin-left: 0.5rem;
+        }
+
+        .status-new {
+            background-color: #10b981;
+            color: white;
+        }
+
+        .status-edit {
+            background-color: #3b82f6;
+            color: white;
+        }
+
         .logout-btn {
             position: absolute;
             bottom: 1.5rem;
@@ -167,34 +213,37 @@
         .logout-btn:hover {
             background: rgba(255,255,255,0.2);
         }
+
+        /* 모바일 반응형 */
+        @media (max-width: 768px) {
+            .andio-sidebar {
+                display: none;
+            }
+
+            .andio-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
-<aside class="admin-sidebar">
-    <div class="admin-header">
-        <h1>관리자 페이지</h1>
-    </div>
+<div th:replace="~{sidebar/andioSidebar.html}"></div>
 
-    <nav class="admin-menu">
-        <a href="/admin">대시보드</a>
-        <a href="/admin/worship">예배 관리</a>
-        <a href="/admin/sermon" class="active">설교 관리</a>
-        <a href="/admin/news">소식 관리</a>
-        <a href="/admin/settings">설정</a>
-    </nav>
-
-    <form th:action="@{/admin/logout}" method="post">
-        <button type="submit" class="logout-btn">로그아웃</button>
-    </form>
-</aside>
-
-<main class="admin-content">
+<main class="andio-content">
     <div class="page-header">
-        <h2 th:text="${sermon.id == null ? '새 설교 추가' : '설교 수정'}">설교 추가/수정</h2>
+        <h2>
+            <span th:text="${sermon.id == null ? '새 설교 추가' : '설교 수정'}">설교 추가/수정</span>
+            <span th:if="${sermon.id == null}" class="status-indicator status-new">신규</span>
+            <span th:if="${sermon.id != null}" class="status-indicator status-edit">수정</span>
+        </h2>
     </div>
 
     <div class="form-card">
-        <form th:action="@{/admin/sermon/save}" method="post" enctype="multipart/form-data" th:object="${sermon}">
+        <form th:action="@{/andio/sermon/save}" method="post" enctype="multipart/form-data" th:object="${sermon}">
+            <!-- CSRF 토큰 -->
+<!--            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
+
             <!-- 수정 시 ID 유지 -->
             <input type="hidden" th:field="*{id}" />
 
@@ -226,9 +275,15 @@
                 <input type="file" class="form-control" id="thumbnail" name="thumbnail" accept="image/*">
 
                 <!-- 기존 썸네일 미리보기 (수정 시) -->
-                <div class="thumbnail-preview" th:if="*{thumbnailUrl != null}">
+                <div class="current-thumbnail" th:if="*{thumbnailUrl != null && thumbnailUrl != ''}">
                     <p>현재 썸네일:</p>
                     <img th:src="*{thumbnailUrl}" alt="썸네일 미리보기">
+                </div>
+
+                <!-- 새 썸네일 미리보기 영역 -->
+                <div id="newThumbnailPreview" class="new-thumbnail" style="display: none;">
+                    <p>새 썸네일 미리보기:</p>
+                    <img id="newThumbnailImage" src="" alt="새 썸네일 미리보기">
                 </div>
             </div>
 
@@ -238,7 +293,7 @@
             </div>
 
             <div class="form-actions">
-                <a href="/admin/sermon" class="btn btn-cancel">취소</a>
+                <a href="/andio/sermon" class="btn btn-cancel">취소</a>
                 <button type="submit" class="btn">저장</button>
             </div>
         </form>
@@ -267,21 +322,16 @@
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
+            const previewDiv = document.getElementById('newThumbnailPreview');
+            const previewImg = document.getElementById('newThumbnailImage');
+
             reader.onload = function(e) {
-                let previewDiv = document.querySelector('.thumbnail-preview');
-
-                if (!previewDiv) {
-                    previewDiv = document.createElement('div');
-                    previewDiv.className = 'thumbnail-preview';
-                    event.target.parentNode.appendChild(previewDiv);
-                }
-
-                previewDiv.innerHTML = `
-                    <p>새 썸네일 미리보기:</p>
-                    <img src="${e.target.result}" alt="썸네일 미리보기">
-                `;
+                previewImg.src = e.target.result;
+                previewDiv.style.display = 'block';
             };
             reader.readAsDataURL(file);
+        } else {
+            document.getElementById('newThumbnailPreview').style.display = 'none';
         }
     });
 </script>

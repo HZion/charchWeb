@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/andio")
 public class adminController {
 
 
@@ -28,7 +28,7 @@ public class adminController {
     public String login() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal())) {
-            return "redirect:/admin";
+            return "redirect:/andio";
         }
         return "admin/login";
     }
@@ -36,7 +36,7 @@ public class adminController {
     @GetMapping("")
     public String adminPage(@AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails != null) {
-            return "admin/dashboard";
+            return "admin/dashBoard";
         }
         return "admin/login";
     }

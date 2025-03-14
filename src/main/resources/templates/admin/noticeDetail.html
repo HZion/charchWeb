@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${notice.id != null ? '공지사항 수정' : '공지사항 작성'} + ' - 안디옥교회 관리자'">공지사항 작성 - 안디옥교회 관리자</title>
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+  <!-- Summernote 에디터 스타일 -->
+  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #f3f4f6;
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* 관리자 레이아웃 */
+    .andio-layout {
+      display: flex;
+      width: 100%;
+    }
+
+    /* 메인 콘텐츠 영역 */
+    .andio-main {
+      flex: 1;
+      margin-left: 250px; /* 사이드바 너비와 동일하게 */
+      padding: 2rem;
+      width: calc(100% - 250px);
+    }
+
+    /* 관리자 대시보드 공지사항 폼 스타일 */
+    .andio-container {
+      width: 100%;
+      max-width: 1200px; /* 최대 너비 설정 */
+      margin: 0 auto;
+    }
+
+    .andio-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .andio-title {
+      font-size: 1.8rem;
+      color: #1f2937;
+      font-weight: 600;
+    }
+
+    .andio-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .andio-back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: #6b7280;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+    }
+
+    .andio-back-btn:hover {
+      background: #4b5563;
+    }
+
+    /* 폼 컨테이너 */
+    .form-container {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .form-header {
+      padding: 1.5rem;
+      background: #f8fafc;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .form-title {
+      font-size: 1.4rem;
+      color: #1f2937;
+      font-weight: 600;
+    }
+
+    .form-body {
+      padding: 1.5rem;
+    }
+
+    /* 폼 스타일 */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #1f2937;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #1e40af;
+      box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+    }
+
+    /* 체크박스 스타일 */
+    .form-checkbox-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-checkbox {
+      margin-right: 0.5rem;
+      cursor: pointer;
+    }
+
+    .checkbox-label {
+      font-size: 1rem;
+      color: #1f2937;
+      cursor: pointer;
+    }
+
+    /* 첨부파일 스타일 */
+    .file-input-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .file-input-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #1f2937;
+    }
+
+    .file-input-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .file-input-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    .file-input {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .file-input-btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background: #1e40af;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .file-input-btn:hover {
+      background: #1d4ed8;
+    }
+
+    .file-list {
+      width: 100%;
+      list-style: none;
+    }
+
+    .file-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem;
+      background: #f8fafc;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+    }
+
+    .file-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .file-name {
+      flex: 1;
+      margin-right: 1rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .file-remove {
+      padding: 0.25rem 0.5rem;
+      background: #ef4444;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+    }
+
+    .file-remove:hover {
+      background: #dc2626;
+    }
+
+    /* 기존 첨부파일 목록 */
+    .existing-files {
+      margin-top: 1rem;
+    }
+
+    .existing-files-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #1f2937;
+    }
+
+    /* 버튼 스타일 */
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .form-btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .form-cancel {
+      background: #e5e7eb;
+      color: #4b5563;
+    }
+
+    .form-cancel:hover {
+      background: #d1d5db;
+    }
+
+    .form-submit {
+      background: #1e40af;
+      color: white;
+    }
+
+    .form-submit:hover {
+      background: #1d4ed8;
+    }
+
+    /* 썸머노트 에디터 커스텀 스타일 */
+    .note-editor {
+      border-color: #e5e7eb !important;
+      border-radius: 6px !important;
+    }
+
+    .note-editor.note-focus {
+      border-color: #1e40af !important;
+      box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1) !important;
+    }
+
+    .note-toolbar {
+      background-color: #f8fafc !important;
+      border-bottom: 1px solid #e5e7eb !important;
+      border-top-left-radius: 6px !important;
+      border-top-right-radius: 6px !important;
+    }
+
+    /* 반응형 스타일 */
+    @media (max-width: 768px) {
+      .andio-main {
+        margin-left: 0;
+        width: 100%;
+        padding: 1rem;
+      }
+
+      .andio-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .andio-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="andio-layout">
+  <div th:replace="~{sidebar/andioSidebar.html}"></div>
+
+  <!-- 메인 콘텐츠 -->
+  <main class="andio-main">
+
+    <div class="andio-container">
+      <div class="andio-header">
+        <h1 class="andio-title" th:text="${notice.id != null ? '공지사항 수정' : '공지사항 작성'}">공지사항 작성</h1>
+        <div class="andio-actions">
+          <a href="/andio/notice" class="andio-back-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            목록으로
+          </a>
+        </div>
+      </div>
+
+      <!-- 공지사항 폼 -->
+      <div class="form-container">
+        <div class="form-header">
+          <h2 class="form-title">공지사항 정보</h2>
+        </div>
+        <div class="form-body">
+          <form th:action="${notice.id != null ? '/andio/notice/edit/' + notice.id : '/andio/notice/add'}" method="post" enctype="multipart/form-data" id="noticeForm">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+            <!-- 공지사항 고정 여부 -->
+<!--            <div class="form-checkbox-group">-->
+<!--              <input type="checkbox" id="pinned" name="pinned" class="form-checkbox" th:checked="${notice.pinned}">-->
+<!--              <label for="pinned" class="checkbox-label">상단 고정 공지</label>-->
+<!--            </div>-->
+
+            <!-- 제목 입력 -->
+            <div class="form-group">
+              <label for="title" class="form-label">제목 <span style="color: #ef4444;">*</span></label>
+              <input type="text" id="title" name="title" class="form-input" placeholder="공지사항 제목을 입력하세요"
+                     th:value="${notice.title}" required>
+            </div>
+
+            <!-- 내용 입력 (썸머노트 에디터) -->
+            <div class="form-group">
+              <label for="content" class="form-label">내용 <span style="color: #ef4444;">*</span></label>
+              <textarea id="content" name="content" class="form-input" style="display: none;" required th:text="${notice.content}"></textarea>
+              <div id="summernote"></div>
+            </div>
+
+            <!-- 첨부파일 -->
+            <div class="file-input-group">
+              <label class="file-input-label">첨부파일</label>
+              <div class="file-input-container">
+                <div class="file-input-wrapper">
+                  <button type="button" class="file-input-btn">파일 선택</button>
+                  <input type="file" id="fileInput" name="files" multiple class="file-input">
+                </div>
+                <small style="color: #6b7280;">(최대 5개 파일, 파일당 최대 10MB)</small>
+              </div>
+
+              <!-- 선택한 새 파일 목록 -->
+              <ul id="fileList" class="file-list"></ul>
+
+              <!-- 기존 첨부파일 목록 (수정인 경우만) -->
+              <div class="existing-files" th:if="${notice.id != null && notice.attachments != null && !notice.attachments.empty}">
+                <div class="existing-files-label">기존 첨부파일</div>
+                <ul class="file-list">
+                  <li class="file-item" th:each="attachment : ${notice.attachments}">
+                    <span class="file-name" th:text="${attachment.originalFilename}">파일명.pdf</span>
+                    <div>
+                      <input type="checkbox" th:id="'keep-' + ${attachment.id}" name="keepAttachments"
+                             th:value="${attachment.id}" checked class="form-checkbox">
+                      <label th:for="'keep-' + ${attachment.id}" class="checkbox-label">유지</label>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- 버튼 영역 -->
+            <div class="form-actions">
+              <a href="/andio/notice" class="form-btn form-cancel">취소</a>
+              <button type="submit" class="form-btn form-submit">저장</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- jQuery 및 Summernote 스크립트 -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/lang/summernote-ko-KR.min.js"></script>
+
+<script>
+  $(document).ready(function() {
+    // Summernote 에디터 초기화
+    $('#summernote').summernote({
+      lang: 'ko-KR',
+      height: 400,
+      toolbar: [
+        ['style', ['style']],
+        ['font', ['bold', 'underline', 'clear']],
+        ['color', ['color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        ['table', ['table']],
+        ['insert', ['link', 'picture']],
+        ['view', ['fullscreen', 'codeview', 'help']]
+      ],
+      callbacks: {
+        onChange: function(contents) {
+          $('#content').val(contents);
+        }
+      }
+    });
+
+    // 기존 내용 설정 (수정인 경우)
+    if ($('#content').val()) {
+      $('#summernote').summernote('code', $('#content').val());
+    }
+
+    // 파일 입력 처리
+    $('#fileInput').on('change', function(e) {
+      const files = e.target.files;
+      const fileList = $('#fileList');
+      fileList.empty();
+
+      if (files.length > 5) {
+        alert('최대 5개의 파일만 업로드할 수 있습니다.');
+        this.value = '';
+        return;
+      }
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (file.size > 10 * 1024 * 1024) {
+          alert(`${file.name} - 파일 크기가 10MB를 초과합니다.`);
+          this.value = '';
+          fileList.empty();
+          return;
+        }
+
+        const li = $('<li class="file-item"></li>');
+        const fileName = $('<span class="file-name"></span>').text(file.name);
+        const removeBtn = $('<button type="button" class="file-remove">삭제</button>');
+
+        removeBtn.on('click', function() {
+          li.remove();
+          // 파일 입력 초기화는 브라우저 보안상 직접 처리할 수 없음
+          // 대신 파일 목록 UI만 제거
+        });
+
+        li.append(fileName).append(removeBtn);
+        fileList.append(li);
+      }
+    });
+
+    // 폼 제출 전 유효성 검사
+    $('#noticeForm').submit(function(e) {
+      const title = $('#title').val().trim();
+      const content = $('#content').val();
+
+      if (!title) {
+        alert('제목을 입력해주세요.');
+        $('#title').focus();
+        e.preventDefault();
+        return false;
+      }
+
+      if (!content || content === '<p><br></p>') {
+        alert('내용을 입력해주세요.');
+        $('#summernote').summernote('focus');
+        e.preventDefault();
+        return false;
+      }
+
+      return true;
+    });
+  });
+</script>
+</body>
+</html>

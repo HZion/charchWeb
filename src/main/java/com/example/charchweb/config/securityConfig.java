@@ -37,18 +37,18 @@ public class securityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/css/**", "/js/**", "/img/**").permitAll()
-                        .requestMatchers("/admin/login", "/admin/login-process").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN") // ROLE_ADMIN 필요
+                        .requestMatchers("/andio/login", "/andio/login-process").permitAll()
+                        .requestMatchers("/andio/**").hasRole("ADMIN") // ROLE_ADMIN 필요
                         .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/admin/login")    // 커스텀 로그인 페이지
-                        .defaultSuccessUrl("/admin")  // 로그인 성공 시 리다이렉트
+                        .loginPage("/andio/login")    // 커스텀 로그인 페이지
+                        .defaultSuccessUrl("/andio")  // 로그인 성공 시 리다이렉트
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/admin/logout")
+                        .logoutUrl("/andio/logout")
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)

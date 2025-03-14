@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>교회 소개 - 안디옥교회</title>
     <link rel="stylesheet" href="/detailCommon.css">
-    <style>
+    <style
+    >
         /* 교회 소개 페이지 전용 스타일 */
         .greeting-content img {
             width: 100%;
@@ -13,7 +14,12 @@
             margin: 1rem 0;
             border-radius: 8px;
         }
-
+        .video-container {
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
         .pastor-card {
             display: flex;
             gap: 2rem;
@@ -67,6 +73,17 @@
         <!-- 현재 섹션에 해당하는 컨텐츠만 표시 -->
         <div th:if="${currentMenu == 'greeting'}">
             <h1>인사말</h1>
+<!--            <div class="video-container" style="max-width: 800px; margin: 0 auto; position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">-->
+<!--                <iframe-->
+<!--                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"-->
+<!--                        src="https://www.youtube.com/embed/zjPCrU7NoS0?autoplay=1&mute=1&si=bLjwoBfp1yK_zgsE"-->
+<!--                        title="안디옥교회 인사말"-->
+<!--                        frameborder="0"-->
+<!--                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"-->
+<!--                        allowfullscreen>-->
+<!--                </iframe>-->
+<!--            </div>-->
+            </div>
             <img src="/api/placeholder/600/300" alt="교회 전경">
             <p>안디옥교회를 방문해 주셔서 감사합니다...</p>
             <p>우리 교회는 하나님의 말씀을 중심으로...</p>

@@ -368,10 +368,10 @@
                         <span th:text="'설교자: ' + ${latestSermon.preacher}">설교자: 담임목사</span>
                         <span th:text="'말씀: ' + ${latestSermon.bibleVerse}">말씀: 요한복음 3:16</span>
                     </div>
-
-                    <div class="sermon-verse" th:if="${latestSermon.bibleVerse != null}">
-                        "하나님이 세상을 이처럼 사랑하사 독생자를 주셨으니 이는 그를 믿는 자마다 멸망하지 않고 영생을 얻게 하려 하심이라" - 요한복음 3:16
-                    </div>
+<!--        추후 성경 구절 넣을꺼면 할것, talbe 수정이 필요함-->
+<!--                    <div class="sermon-verse" th:if="${latestSermon.bibleVerse != null}">-->
+<!--                        "하나님이 세상을 이처럼 사랑하사 독생자를 주셨으니 이는 그를 믿는 자마다 멸망하지 않고 영생을 얻게 하려 하심이라" - 요한복음 3:16-->
+<!--                    </div>-->
 
                     <p class="sermon-text" th:text="${#strings.abbreviate(latestSermon.content, 300)}">
                         하나님이 세상을 이처럼 사랑하사 독생자를 주셨으니 이는 그를 믿는 자마다 멸망하지 않고 영생을 얻게 하려 하심이라.
@@ -390,13 +390,16 @@
 
             <div class="sermon-list">
                 <div class="sermon-item" th:each="sermon : ${recentSermons}">
-                    <img th:if="${sermon.thumbnailUrl != null}"
-                         th:src="@{/img/semon_thumbnail.png}"
-                         alt="설교 썸네일">
-                    <img th:unless="${sermon.thumbnailUrl != null}"
-                         th:src="@{/img/semon_thumbnail.png}"
+                    <div class="sermon-video">
+                        <img th:if="${#strings.isEmpty(sermon.thumbnailUrl)}"
+                             th:src="@{/img/semon_thumbnail.png}"
+                             alt="설교 영상 썸네일">
+                        <img th:unless="${#strings.isEmpty(sermon.thumbnailUrl)}"
+                             th:src="${sermon.thumbnailUrl}"
+                             alt="설교 영상 썸네일">
+                    </div>
 
-                         alt="설교 썸네일">
+
                     <div class="sermon-item-content">
                         <a th:href="@{/sermon/{id}(id=${sermon.id})}" class="sermon-item-title" th:text="${sermon.title}">선한 목자</a>
                         <div class="sermon-item-info">
