@@ -1,19 +1,21 @@
 ## 프로젝트 상세내용
 
 <aside>
-<img src="/icons/wrench_gray.svg" alt="/icons/wrench_gray.svg" width="40px" /> **사용 기술 스택**
+**사용 기술 스택**
 
-![image.png](attachment:f42a49e4-435b-41e9-a422-d74bf369a134:image.png)
-
+![image](https://github.com/user-attachments/assets/bcd657b9-74ba-41c8-93a5-870c09986334)
 서비스 개발 
 Spring Boot
 
-![image.png](attachment:e464261c-8436-43d2-826d-d33c89773120:image.png)
+
+
+![image](https://github.com/user-attachments/assets/6a0944ac-9a34-47d9-9e9e-fe5668ab70e0)
 
 DB
 postSQL
 
-![image.png](attachment:536d79c2-a172-4faa-aa89-0084593d5cfc:image.png)
+![Uploading image.png…]()
+
 
 배포 : Docker
 
@@ -96,11 +98,11 @@ postSQL
 </aside>
 
 <aside>
-<img src="/icons/wrench_gray.svg" alt="/icons/wrench_gray.svg" width="40px" /> DB Table
+DB Table
 
 - 설교 테이블
     
-    
+    ```sql
     CREATE TABLE sermons (
     id BIGSERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
@@ -115,6 +117,7 @@ postSQL
     CREATE INDEX idx_sermons_date ON sermons(date);
     CREATE INDEX idx_sermons_title ON sermons(title);
     CREATE INDEX idx_sermons_preacher ON sermons(preacher);
+    ```
 - 앨범
     
     ```sql
@@ -141,6 +144,7 @@ postSQL
     ```
     
 - 공지사항
+    ```sql
     - - 공지사항 테이블
     CREATE TABLE notices (
     id SERIAL PRIMARY KEY,
@@ -183,10 +187,11 @@ postSQL
     CREATE INDEX idx_notices_pinned_created ON notices (pinned, created_at DESC);
     CREATE INDEX idx_notice_attachments_notice_id ON notice_attachments (notice_id);
     CREATE INDEX idx_notice_logs_notice_id ON notice_logs (notice_id);
+    ```
 </aside>
 
 <aside>
-<img src="/icons/wrench_gray.svg" alt="/icons/wrench_gray.svg" width="40px" /> 서비스 구현
+ 서비스 구현
 
 </aside>
 
@@ -195,7 +200,7 @@ postSQL
 ### 결과
 
 <aside>
-<img src="/icons/chess-king_blue.svg" alt="/icons/chess-king_blue.svg" width="40px" /> 긍정적인 점
+긍정적인 점
 
 -여지것 배운것을 활용하여  제작부터 배포 까지 할 수 있었던 시간이었다.
 
@@ -206,7 +211,7 @@ postSQL
 </aside>
 
 <aside>
-<img src="/icons/thinking_pink.svg" alt="/icons/thinking_pink.svg" width="40px" /> **아쉬웠던 점**
+ **아쉬웠던 점**
 
 - 
     
@@ -219,7 +224,7 @@ postSQL
 ### 프로젝트를 통해 얻은 것
 
 <aside>
-<img src="/icons/groups_gray.svg" alt="/icons/groups_gray.svg" width="40px" />
+
 
 - 기존 지식을 정리하는 시간이었다.
 - 개발 환경에 기반하여 설계를 해야하는 중요성에 대하여 배웠다.
