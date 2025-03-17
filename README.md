@@ -14,7 +14,7 @@ Spring Boot
 DB
 postSQL
 
-![Uploading image.png…]()
+![image](https://github.com/user-attachments/assets/f3aae27d-d453-4e12-8696-5d69ab4313a6)
 
 
 배포 : Docker
@@ -22,14 +22,14 @@ postSQL
 </aside>
 
 <aside>
-<img src="/icons/map_gray.svg" alt="/icons/map_gray.svg" width="40px" /> 아키텍처
+아키텍처
+![Uploading image.png…]()
 
-![image.png](attachment:fbf1e977-1cee-45d3-afe8-57b68092af7a:image.png)
 
 </aside>
 
 <aside>
-<img src="/icons/archive_gray.svg" alt="/icons/archive_gray.svg" width="40px" /> API 명세서
+ API 명세서
 
 # 교회 웹 애플리케이션 API 문서 (테이블 형식)
 
