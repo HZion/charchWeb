@@ -14,7 +14,8 @@ Spring Boot
 DB
 postSQL
 
-![image](https://github.com/user-attachments/assets/f3aae27d-d453-4e12-8696-5d69ab4313a6)
+![image](https://github.com/user-attachments/assets/e65ee55d-e019-43db-91f7-aa25ed35792a)
+
 
 
 배포 : Docker
@@ -23,7 +24,8 @@ postSQL
 
 <aside>
 아키텍처
-![Uploading image.png…]()
+
+![image](https://github.com/user-attachments/assets/120007c2-1b10-4f95-a64f-582fa6c1a259)
 
 
 </aside>
