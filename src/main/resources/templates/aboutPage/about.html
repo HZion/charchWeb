@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>교회 소개 - 안디옥교회</title>
     <link rel="stylesheet" href="/detailCommon.css">
-    <style
-    >
+    <style>
         /* 교회 소개 페이지 전용 스타일 */
         .greeting-content img {
             width: 100%;
@@ -20,20 +19,52 @@
             overflow: hidden;
             margin-bottom: 1.5rem;
         }
-        .pastor-card {
+
+        /* 섬기는 분들 스타일 */
+        .pastor-container {
             display: flex;
             gap: 2rem;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+
+        /* 모바일에서는 가운데 정렬 */
+        @media (max-width: 768px) {
+            .pastor-container {
+                justify-content: center;
+            }
+        }
+
+        /* 데스크톱에서는 왼쪽 정렬 */
+        @media (min-width: 769px) {
+            .pastor-container {
+                justify-content: flex-start;
+            }
+        }
+
+        .pastor-card {
+            text-align: center;
+            width: 200px;
             margin-bottom: 2rem;
-            padding: 1rem;
-            background: #f8fafc;
-            border-radius: 8px;
         }
 
         .pastor-card img {
-            width: 150px;
-            height: 200px;
+            width: 200px;
+            height: 250px;
             object-fit: cover;
-            border-radius: 4px;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .pastor-card h3 {
+            margin: 0.5rem 0;
+            color: #1e40af;
+        }
+
+        .pastor-card p {
+            color: #4b5563;
+            margin: 0;
         }
 
         .mission-list {
@@ -58,6 +89,7 @@
             height: 100%;
             border-radius: 8px;
         }
+
     </style>
 </head>
 <body>
@@ -72,42 +104,73 @@
     <main class="content">
         <!-- 현재 섹션에 해당하는 컨텐츠만 표시 -->
         <div th:if="${currentMenu == 'greeting'}">
-            <h1>인사말</h1>
-<!--            <div class="video-container" style="max-width: 800px; margin: 0 auto; position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">-->
-<!--                <iframe-->
-<!--                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"-->
-<!--                        src="https://www.youtube.com/embed/zjPCrU7NoS0?autoplay=1&mute=1&si=bLjwoBfp1yK_zgsE"-->
-<!--                        title="안디옥교회 인사말"-->
-<!--                        frameborder="0"-->
-<!--                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"-->
-<!--                        allowfullscreen>-->
-<!--                </iframe>-->
-<!--            </div>-->
-            </div>
-            <img src="/api/placeholder/600/300" alt="교회 전경">
-            <p>안디옥교회를 방문해 주셔서 감사합니다...</p>
-            <p>우리 교회는 하나님의 말씀을 중심으로...</p>
+<!--            <h1>인사말</h1>-->
+<!--            &lt;!&ndash;            <div class="video-container" style="max-width: 800px; margin: 0 auto; position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">&ndash;&gt;-->
+<!--            &lt;!&ndash;                <iframe&ndash;&gt;-->
+<!--            &lt;!&ndash;                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"&ndash;&gt;-->
+<!--            &lt;!&ndash;                        src="https://www.youtube.com/embed/zjPCrU7NoS0?autoplay=1&mute=1&si=bLjwoBfp1yK_zgsE"&ndash;&gt;-->
+<!--            &lt;!&ndash;                        title="안디옥교회 인사말"&ndash;&gt;-->
+<!--            &lt;!&ndash;                        frameborder="0"&ndash;&gt;-->
+<!--            &lt;!&ndash;                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"&ndash;&gt;-->
+<!--            &lt;!&ndash;                        allowfullscreen>&ndash;&gt;-->
+<!--            &lt;!&ndash;                </iframe>&ndash;&gt;-->
+<!--            &lt;!&ndash;            </div>&ndash;&gt;-->
+
+<!--            <img src="/api/placeholder/600/300" alt="교회 전경">-->
+<!--            <p>안디옥교회를 방문해 주셔서 감사합니다...</p>-->
+<!--            <p>우리 교회는 하나님의 말씀을 중심으로...</p>-->
         </div>
 
         <div th:if="${currentMenu == 'pastors'}">
-            <h1>섬기는 분들</h1>
-            <div class="pastor-card">
-                <img src="/api/placeholder/150/200" alt="담임목사">
-                <div>
-                    <h2>홍길동 담임목사</h2>
-                    <p>학력 및 경력...</p>
+            <h1>섬기는 분들</h1><br>
+
+            <div class="pastor-container">
+                <!-- 첫 번째 인물 카드 -->
+                <div class="pastor-card">
+                    <img src="/img/pastor.png" alt="담임목사">
+                    <h3>하용환</h3>
+                    <p>담임목사</p>
+                </div>
+
+                <!-- 두 번째 인물 카드 -->
+                <div class="pastor-card">
+                    <img src="/img/presbyter.gif" alt="장로">
+                    <h3>조충현</h3>
+                    <p>장로</p>
                 </div>
             </div>
         </div>
 
         <div th:if="${currentMenu == 'mission'}">
-            <h1>후원 및 선교사/단체</h1>
-            <ul class="mission-list">
-                <li>
-                    <h3>아프리카 선교</h3>
-                    <p>케냐 나이로비 지역...</p>
-                </li>
-            </ul>
+<!--            <h1>협력 선교</h1>-->
+
+            <div class="mission-section">
+                <h2>해외 선교</h2>
+                <ul class="mission-list">
+                    <li>
+                        <h3>필리핀 민다나오 선교</h3>
+<!--                        <p>강치원선교사</p>-->
+                    </li>
+                </ul>
+            </div>
+
+            <div class="mission-section">
+                <h2>국내 선교</h2>
+                <ul class="mission-list">
+                    <li>
+                        <h3>광명 서현</h3>
+                    </li>
+                    <li>
+                        <h3>북평제일</h3>
+                    </li>
+                    <li>
+                        <h3>계곡동부</h3>
+                    </li>
+                    <li>
+                        <h3>완도소망</h3>
+                    </li>
+                </ul>
+            </div>
         </div>
 
         <div th:if="${currentMenu == 'location'}">
@@ -122,7 +185,7 @@
 <div th:replace="~{footer/footer.html}"></div>
 
 <!-- 카카오맵 스크립트는 location 페이지일 때만 로드 -->
-<script th:if="${currentMenu == 'location'}">
+<script th:if="${currentMenu == 'location'}" th:inline="javascript">
     document.addEventListener("DOMContentLoaded", function() {
         loadKakaoMap();
     });
@@ -151,14 +214,22 @@
 
     function loadKakaoMap() {
         if (typeof kakao === 'undefined') {
-            var script = document.createElement("script");
-            script.src = "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=48a15f5614bae32727e5eb3d2e2c1f89";
-            script.onload = () => {
-                kakao.maps.load(() => {
-                    initKakaoMap();
+            // 서버에서 API 키를 가져오는 엔드포인트 호출
+            fetch('/api/map-key')
+                .then(response => response.json())
+                .then(data => {
+                    var script = document.createElement("script");
+                    script.src = "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=" + data.key;
+                    script.onload = () => {
+                        kakao.maps.load(() => {
+                            initKakaoMap();
+                        });
+                    };
+                    document.head.appendChild(script);
+                })
+                .catch(error => {
+                    console.error("맵 키를 가져오는 중 오류가 발생했습니다:", error);
                 });
-            };
-            document.head.appendChild(script);
         } else {
             initKakaoMap();
         }

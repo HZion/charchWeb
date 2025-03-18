@@ -1,6 +1,8 @@
 package com.example.charchweb.Router;
 
+import com.example.charchweb.DTO.ChurchSetting;
 import com.example.charchweb.DTO.notice;
+import com.example.charchweb.service.ChurchSettingService;
 import com.example.charchweb.service.noticeService;
 import com.example.charchweb.service.photoAlbumService;
 import com.example.charchweb.DTO.Sermon;
@@ -38,17 +40,24 @@ public class RouterController {
     @Autowired
     private noticeService noticeService;
 
+    @Autowired
+    private ChurchSettingService churchSettingService;
+
     private String bannerURl = "https://images.unsplash.com/photo-1515162305285-0293e4767cc2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8JUVBJUI1JTkwJUVEJTlBJThDfGVufDB8fDB8fHww";
 
     @GetMapping("/")
-    public String index() {
+    public String index(Model model) {
+        // Get church settings and add to the model
+        ChurchSetting churchSetting = churchSettingService.getChurchSetting();
+        model.addAttribute("churchSetting", churchSetting);
         return "home";
     }
 
+    // Rest of the code remains the same...
     @GetMapping("/about")
     public String about(@RequestParam(defaultValue = "greeting") String menu, Model model) {
         List<SubMenu> subMenus = Arrays.asList(
-                new SubMenu("인사말", "/about?menu=greeting", menu.equals("greeting")),
+//                new SubMenu("인사말", "/about?menu=greeting", menu.equals("greeting")),
                 new SubMenu("섬기는 분들", "/about?menu=pastors", menu.equals("pastors")),
                 new SubMenu("후원 및 선교사/단체", "/about?menu=mission", menu.equals("mission")),
                 new SubMenu("오시는 길", "/about?menu=location", menu.equals("location"))

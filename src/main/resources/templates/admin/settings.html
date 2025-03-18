@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>교회 설정 관리 - 안디옥교회</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #f3f4f6;
+      min-height: 100vh;
+      display: flex;
+    }
+
+    .admin-content {
+      margin-left: 250px;
+      padding: 2rem;
+      flex: 1;
+    }
+
+    .settings-container {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .settings-container h2 {
+      color: #1e40af;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .settings-section {
+      margin-bottom: 2rem;
+    }
+
+    .settings-section h3 {
+      color: #374151;
+      margin-bottom: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #4b5563;
+      font-weight: 500;
+    }
+
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+
+    .practice-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      padding: 1rem;
+      background: #f9fafb;
+    }
+
+    .practice-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      background-color: #dbeafe;
+      color: #1e40af;
+      border-radius: 50%;
+      font-weight: bold;
+      margin-right: 1rem;
+      flex-shrink: 0;
+    }
+
+    .practice-input {
+      flex-grow: 1;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background-color 0.3s, box-shadow 0.3s;
+      border: none;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background-color: #2563eb;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #1d4ed8;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .alert {
+      padding: 1rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+
+    .alert-success {
+      background-color: #d1fae5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    .alert-danger {
+      background-color: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+    }
+
+    .slide-item {
+      margin-bottom: 1.5rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 1.5rem;
+      background: #f9fafb;
+    }
+
+    .slide-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 3rem;
+      height: 3rem;
+      background-color: #dbeafe;
+      color: #1e40af;
+      border-radius: 50%;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .slide-form {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .tab-header {
+      display: flex;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .tab-button {
+      padding: 0.75rem 1.5rem;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #4b5563;
+    }
+
+    .tab-button.active {
+      border-bottom-color: #2563eb;
+      color: #1e40af;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .preview-container {
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+      padding: 1rem;
+      border-radius: 8px;
+      background: #f3f4f6;
+    }
+
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+      height: 0;
+      overflow: hidden;
+      border-radius: 8px;
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 8px;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+<div th:replace="~{sidebar/andioSidebar.html}"></div>
+
+<main class="admin-content">
+  <div class="settings-container">
+    <h2>교회 설정 관리</h2>
+
+    <!-- Flash message for success -->
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}">
+      설정이 성공적으로 저장되었습니다.
+    </div>
+
+    <!-- Flash message for error -->
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}">
+      설정 저장 중 오류가 발생했습니다.
+    </div>
+
+    <!-- 탭 메뉴 -->
+    <div class="tab-header">
+      <button class="tab-button active" onclick="openTab(event, 'tab-general')">교회 표어/생활실천</button>
+      <button class="tab-button" onclick="openTab(event, 'tab-video')">홍보 영상</button>
+      <button class="tab-button" onclick="openTab(event, 'tab-slides')">메인 슬라이드</button>
+    </div>
+
+    <!-- 탭 컨텐츠: 교회 표어/생활실천 -->
+    <div id="tab-general" class="tab-content active">
+      <div class="settings-section">
+        <h3>교회 표어</h3>
+        <form method="post" th:action="@{/andio/settings/update-motto}">
+          <div class="form-group">
+            <label for="churchMotto">교회 표어</label>
+            <input type="text" id="churchMotto" name="motto" th:value="${churchSetting.motto}" placeholder="교회 표어를 입력하세요">
+          </div>
+          <button type="submit" class="btn btn-primary">저장</button>
+        </form>
+      </div>
+
+      <div class="settings-section">
+        <h3>생활 실천</h3>
+        <div th:each="practice, stat : ${churchSetting.practices}" class="practice-item">
+          <div class="practice-number" th:text="${stat.count < 10 ? '0' + stat.count : stat.count}">01</div>
+          <form method="post" th:action="@{/andio/settings/update-practice}" style="flex-grow: 1; display: flex;">
+            <input type="hidden" name="index" th:value="${stat.index}">
+            <input type="text" name="practice" class="practice-input"
+                   th:value="${practice}" placeholder="생활 실천 항목을 입력하세요">
+            <button type="submit" class="btn btn-primary">저장</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- 탭 컨텐츠: 홍보 영상 -->
+    <div id="tab-video" class="tab-content">
+      <div class="settings-section">
+        <h3>홍보 영상 URL</h3>
+        <div class="preview-container">
+          <h4>미리보기</h4>
+          <div class="video-container">
+            <iframe id="video-preview" th:src="${churchSetting.promoVideoUrl}"
+                    title="안디옥교회 소개 영상" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+          </div>
+        </div>
+        <form method="post" th:action="@{/andio/settings/update-promo-video}">
+          <div class="form-group">
+            <label for="promoVideoUrl">YouTube 임베드 URL</label>
+            <input type="text" id="promoVideoUrl" name="promoVideoUrl"
+                   th:value="${churchSetting.promoVideoUrl}"
+                   placeholder="YouTube 영상의 임베드 URL을 입력하세요 (https://www.youtube.com/embed/...)">
+          </div>
+          <p style="margin-bottom: 1rem; color: #64748b; font-size: 0.9rem;">
+            * YouTube 임베드 URL은 영상 공유 버튼에서 '퍼가기'를 선택한 후, '소스 코드'에서 iframe 태그의 src 속성값을 입력해주세요.
+          </p>
+          <button type="submit" class="btn btn-primary">저장</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- 탭 컨텐츠: 메인 슬라이드 -->
+    <div id="tab-slides" class="tab-content">
+      <div class="settings-section">
+        <h3>메인 슬라이드 관리</h3>
+        <p style="margin-bottom: 1.5rem; color: #4b5563;">메인 페이지의 슬라이드 제목과 부제목을 관리합니다.</p>
+
+        <div th:each="slide, stat : ${churchSetting.slides}" class="slide-item">
+          <div class="slide-number" th:text="${stat.count}">1</div>
+          <form method="post" th:action="@{/andio/settings/update-slide}">
+            <input type="hidden" name="index" th:value="${stat.index}">
+
+            <div class="slide-form">
+              <div class="form-group">
+                <label th:for="'slide-title-' + ${stat.index}">제목</label>
+                <input type="text" th:id="'slide-title-' + ${stat.index}" name="title"
+                       th:value="${slide.title}" placeholder="슬라이드 제목">
+              </div>
+              <div class="form-group">
+                <label th:for="'slide-subtitle-' + ${stat.index}">부제목</label>
+                <input type="text" th:id="'slide-subtitle-' + ${stat.index}" name="subtitle"
+                       th:value="${slide.subtitle}" placeholder="슬라이드 부제목">
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">저장</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  function openTab(evt, tabId) {
+    // 모든 탭 컨텐츠 숨기기
+    var tabContents = document.getElementsByClassName("tab-content");
+    for (var i = 0; i < tabContents.length; i++) {
+      tabContents[i].classList.remove("active");
+    }
+
+    // 모든 탭 버튼 비활성화
+    var tabButtons = document.getElementsByClassName("tab-button");
+    for (var i = 0; i < tabButtons.length; i++) {
+      tabButtons[i].classList.remove("active");
+    }
+
+    // 선택한 탭 컨텐츠 표시
+    document.getElementById(tabId).classList.add("active");
+
+    // 선택한 탭 버튼 활성화
+    evt.currentTarget.classList.add("active");
+  }
+
+  // 영상 URL 변경 시 미리보기 업데이트
+  document.getElementById('promoVideoUrl').addEventListener('input', function() {
+    document.getElementById('video-preview').src = this.value;
+  });
+</script>
+</body>
+</html>

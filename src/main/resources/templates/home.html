@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>안디옥교회</title>
-    <link rel="stylesheet" href="/home.css">
-
 </head>
 <style>
     * {
@@ -14,8 +12,16 @@
         box-sizing: border-box;
     }
 
+    html {
+        scroll-behavior: smooth; /* 부드러운 스크롤 효과 */
+        scroll-snap-type: y mandatory; /* 세로 방향 스냅 스크롤 활성화 */
+        overflow-y: scroll; /* 세로 스크롤 허용 */
+        max-width: 100%; /* 최대 너비 설정 */
+    }
+
     body {
         font-family: 'Arial', sans-serif;
+        overflow-x: hidden;
     }
 
     /* Navigation */
@@ -58,14 +64,63 @@
         color: #1e40af;
     }
 
-    /* Hero Section */
-    .hero {
+    /* 섹션 네비게이션 */
+    .section-nav {
+        position: fixed;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .section-nav a {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: rgba(0,0,0,0.3);
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .section-nav a:hover,
+    .section-nav a.active {
+        background-color: #1e40af;
+        transform: scale(1.2);
+    }
+
+    /* 모든 섹션에 스냅 포인트 설정 */
+    .hero-container,
+    .welcome,
+    .promo-video,
+    .info-section {
+        scroll-snap-align: start; /* 스크롤 시 섹션의 시작 부분에 스냅 */
+        min-height: 100vh; /* 최소 화면 높이만큼 차지 */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 4rem 1rem;
+        box-sizing: border-box;
+    }
+
+    /* Hero Container and Slides */
+    .hero-container {
+        width: 100%;
         height: 100vh;
         position: relative;
-        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
-        url('https://images.unsplash.com/photo-1515162305285-0293e4767cc2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8JUVBJUI1JTkwJUVEJTlBJThDfGVufDB8fDB8fHww');
-        background-size: cover;
-        background-position: center;
+        overflow: hidden;
+        padding: 0;
+    }
+
+    .slide {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -73,14 +128,52 @@
         color: white;
     }
 
+    .slide.active {
+        opacity: 1;
+    }
+
+    /* Slides Backgrounds */
+    .slide:nth-child(1) {
+        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+        url('https://images.unsplash.com/photo-1515162305285-0293e4767cc2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8JUVBJUI1JTkwJUVEJTlBJThDfGVufDB8fDB8fHww&auto=format&fit=crop&w=2000&q=80');
+        background-size: cover;
+        background-position: center;
+    }
+
+    .slide:nth-child(2) {
+        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+        url('https://images.unsplash.com/photo-1507692812060-98338d07aca3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');
+        background-size: cover;
+        background-position: center;
+    }
+
+    .slide:nth-child(3) {
+        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+        url('https://img.freepik.com/premium-photo/white-church-steeple-against-blue-sky-with-wispy-clouds_1223942-2181.jpg');
+        background-size: cover;
+        background-position: center;
+    }
+
+    .hero-content {
+        max-width: 800px;
+        padding: 0 20px;
+    }
+
     .hero-content h1 {
-        font-size: 3.5rem;
-        margin-bottom: 1rem;
+        font-size: 3.8rem;
+        margin-bottom: 1.2rem;
+        font-weight: 700;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        letter-spacing: -0.02em;
     }
 
     .hero-content p {
-        font-size: 1.5rem;
-        margin-bottom: 2rem;
+        font-size: 1.6rem;
+        margin-bottom: 2.2rem;
+        font-weight: 400;
+        text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        letter-spacing: -0.01em;
+        opacity: 0.95;
     }
 
     .cta-button {
@@ -98,27 +191,247 @@
         background-color: #1d4ed8;
     }
 
-    /* Welcome Section */
+    /* Slide Indicators */
+    .slide-indicators {
+        position: absolute;
+        bottom: 20px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .indicator.active {
+        background-color: white;
+    }
+
+    /* 커서 스타일링 */
+    .hero-container {
+        cursor: grab;
+    }
+
+    .hero-container:active {
+        cursor: grabbing;
+    }
+
+    /* 환영 섹션 */
     .welcome {
-        padding: 5rem 1rem;
-        background-color: #f9fafb;
+        background-color: #f8fafc;
         text-align: center;
+        padding: 6rem 1rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .welcome::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('https://images.unsplash.com/photo-1542601098-8fc114e148e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');
+        background-size: cover;
+        background-position: center;
+        opacity: 0.04;
+        z-index: 0;
     }
 
     .welcome-container {
-        max-width: 800px;
+        max-width: 1100px;
         margin: 0 auto;
+        width: 100%;
+        position: relative;
+        z-index: 1;
+        background-color: rgba(255, 255, 255, 0.85);
+        padding: 3rem;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     }
 
     .welcome h2 {
+        font-size: 2.4rem;
+        color: #1e40af;
+        margin-bottom: 2.5rem;
+        position: relative;
+        display: inline-block;
+    }
+
+    .welcome h2::after {
+        content: '';
+        position: absolute;
+        bottom: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 3px;
+        background-color: #3b82f6;
+        border-radius: 2px;
+    }
+
+    .welcome p {
+        font-size: 1.1rem;
+        line-height: 1.7;
+        color: #4b5563;
+    }
+
+    .welcome-content {
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        justify-content: space-between;
+        gap: 4rem;
+        margin-top: 1rem;
+    }
+
+    .welcome-left, .welcome-right {
+        flex: 1;
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        padding: 2rem;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .welcome-left:hover, .welcome-right:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .welcome-left {
+        border-top: 4px solid #2563eb;
+    }
+
+    .welcome-right {
+        border-top: 4px solid #4f46e5;
+    }
+
+    .welcome h3 {
+        font-size: 1.7rem;
+        font-weight: 700;
+        color: #1e3a8a;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    .welcome-left h3 {
         font-size: 2rem;
+        margin-top: 1rem;
+        margin-bottom: 2rem;
+        color: #1e3a8a;
+        text-align: center;
+        line-height: 1.3;
+    }
+
+    .practice-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .practice-list li {
+        margin-bottom: 1.5rem;
+        font-size: 1.1rem;
+        position: relative;
+        padding-left: 3.8rem;
+        color: #4b5563;
+        display: flex;
+        align-items: center;
+        min-height: 3rem;
+        transition: transform 0.2s ease;
+    }
+
+    .practice-list li:hover {
+        transform: translateX(5px);
+        color: #1e3a8a;
+    }
+
+    .practice-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 3rem;
+        height: 3rem;
+        background-color: #e0f2fe;
+        color: #1e40af;
+        border-radius: 50%;
+        font-weight: bold;
+        position: absolute;
+        left: 0;
+        box-shadow: 0 2px 8px rgba(30, 64, 175, 0.15);
+        border: 2px solid white;
+        transition: all 0.3s ease;
+    }
+
+    .practice-list li:hover .practice-number {
+        background-color: #bfdbfe;
+        transform: scale(1.1);
+    }
+
+    /* 프로모 비디오 섹션 */
+    .promo-video {
+        background-color: #e0e7ff;
+        text-align: center;
+    }
+
+    .promo-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    .promo-video h2 {
+        font-size: 2.2rem;
         color: #1f2937;
         margin-bottom: 2rem;
     }
 
-    /* Info Cards */
+    .video-wrapper {
+        position: relative;
+        padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+        height: 0;
+        overflow: hidden;
+        max-width: 800px;
+        margin: 0 auto;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        border-radius: 12px;
+    }
+
+    .video-wrapper iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 12px;
+        border: none;
+    }
+
+    .video-description {
+        margin-top: 2rem;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+        font-size: 1.1rem;
+        line-height: 1.7;
+        color: #4b5563;
+    }
+
+    /* 정보 카드 섹션 */
     .info-section {
-        padding: 5rem 1rem;
         background-color: white;
     }
 
@@ -129,6 +442,7 @@
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 2rem;
         padding: 0 1rem;
+        width: 100%;
     }
 
     .card {
@@ -136,6 +450,12 @@
         padding: 2rem;
         border-radius: 8px;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px rgba(0,0,0,0.1);
     }
 
     .card h3 {
@@ -144,50 +464,62 @@
         margin-bottom: 1rem;
     }
 
+    .card p {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+        color: #4b5563;
+    }
+
     .card-icon {
         width: 48px;
         height: 48px;
         margin-bottom: 1rem;
+        color: #1e40af;
     }
 
-    /* Footer */
-    footer {
-        background-color: #1f2937;
-        color: white;
-        padding: 3rem 1rem;
+    /* 애니메이션 클래스 */
+    .fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
     }
 
-    .footer-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 2rem;
+    .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
     }
 
-    .footer-section h3 {
-        font-size: 1.2rem;
-        margin-bottom: 1rem;
-    }
-
-    .footer-bottom {
-        text-align: center;
-        margin-top: 2rem;
-        padding-top: 2rem;
-        border-top: 1px solid rgba(255,255,255,0.1);
-    }
-
-    /* Mobile Menu */
-    .mobile-menu-btn {
-        display: none;
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        cursor: pointer;
-        color: #4b5563;
-    }
-
+    /* 모바일 스타일 */
     @media (max-width: 768px) {
+        .welcome {
+            padding: 4rem 1rem;
+        }
+
+        .welcome-container {
+            padding: 2rem 1.5rem;
+        }
+
+        .welcome h2 {
+            font-size: 2rem;
+        }
+
+        .welcome-content {
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        .welcome-left, .welcome-right {
+            padding: 1.5rem;
+        }
+
+        .welcome-left {
+            margin-bottom: 0;
+        }
+
+        html {
+            scroll-snap-type: none; /* 모바일에서는 스냅 스크롤 해제 */
+        }
+
         .mobile-menu-btn {
             display: block;
         }
@@ -209,34 +541,157 @@
         }
 
         .hero-content h1 {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
+        }
+
+        .section-nav {
+            display: none; /* 모바일에서 사이드 네비게이션 숨김 */
+        }
+
+        /* 카드 컨테이너 수정 */
+        .cards-container {
+            grid-template-columns: 1fr; /* 한 열로 표시 */
+            gap: 1.5rem; /* 간격 축소 */
+            padding: 0 1rem;
+            margin-bottom: 2rem; /* 하단 여백 추가 */
+        }
+
+        /* 카드 자체의 패딩과 마진 조정 */
+        .card {
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            width: 100%;
+            overflow: hidden; /* 내용이 넘치지 않도록 */
+        }
+
+        /* 카드 내부 텍스트 크기 조정 */
+        .card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .card p {
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem; /* 각 단락 사이 간격 추가 */
+        }
+
+        /* 마지막 정보 섹션에 추가 패딩 부여 */
+        .info-section {
+            padding: 3rem 1rem 6rem; /* 하단 패딩 크게 증가 */
+        }
+
+        /* 아이콘 크기 조정 */
+        .card-icon {
+            width: 40px;
+            height: 40px;
+        }
+
+        /* 모바일에서 스냅 스크롤 조정 */
+        .hero-container, .welcome, .promo-video, .info-section {
+            scroll-snap-align: none; /* 스냅 포인트 해제 */
+            min-height: auto; /* 컨텐츠에 맞게 높이 조정 */
+        }
+
+        /* 히어로 섹션은 전체 높이 유지 */
+        .hero-container {
+            min-height: 100vh;
+        }
+    }
+
+    /* 매우 작은 화면에 대한 추가 스타일 */
+    @media (max-width: 375px) {
+        .card {
+            padding: 1.2rem;
+        }
+
+        .card h3 {
+            font-size: 1.2rem;
+        }
+
+        .card p {
+            font-size: 0.9rem;
+        }
+
+        .info-section {
+            padding: 2rem 0.8rem 6rem;
         }
     }
 </style>
 <body>
 <div th:replace="~{header/header.html}"></div>
 
-<section class="hero">
-    <div class="hero-content">
-        <h1>하나님의 사랑이 넘치는 교회</h1>
-        <p>함께 예배하며 성장하는 믿음의 공동체</p>
-<!--        <form method="get" action="/worship">-->
-<!--        <button class="cta-button">예배 시간 안내</button>-->
-<!--        </form>-->
-    </div>
-</section>
+<!-- 사이드 네비게이션 -->
+<div class="section-nav">
+    <a href="#hero" class="active" title="홈"></a>
+    <a href="#welcome" title="환영합니다"></a>
+    <a href="#video" title="교회 소개 영상"></a>
+    <a href="#info" title="교회 정보"></a>
+</div>
 
-<section class="welcome">
-    <div class="welcome-container">
+<div id="hero" class="hero-container">
+    <!-- 슬라이드 반복 -->
+    <section th:each="slide, stat : ${churchSetting.slides}"
+             th:class="${stat.index == 0 ? 'slide active' : 'slide'}">
+        <div class="hero-content">
+            <h1 th:text="${slide.title}">변화와 성숙</h1>
+            <p th:text="${slide.subtitle}">하나님의 백성으로서의 삶</p>
+
+        </div>
+    </section>
+
+    <!-- 슬라이드 인디케이터 -->
+    <div class="slide-indicators">
+        <span th:each="slide, stat : ${churchSetting.slides}"
+              th:class="${stat.index == 0 ? 'indicator active' : 'indicator'}"
+              th:onclick="'setSlide(' + ${stat.index} + ')'"></span>
+    </div>
+</div>
+
+<section id="welcome" class="welcome">
+    <div class="welcome-container fade-in">
         <h2>환영합니다</h2>
-        <p>안디옥교회는 하나님의 말씀을 중심으로 예수 그리스도의 사랑을 실천하며,
-            모든 성도가 영적으로 성장하고 성숙한 그리스도인으로 살아가도록 돕는 교회입니다.</p>
+        <div class="welcome-content">
+            <div class="welcome-left">
+                <h3>교회 표어</h3>
+                <h3 th:text="${churchSetting.motto}">이끄심과 나타내심</h3>
+            </div>
+            <div class="welcome-right">
+                <h3>생활실천</h3><br>
+                <ul class="practice-list">
+                    <li th:each="practice, stat : ${churchSetting.practices}">
+                        <span class="practice-number" th:text="${stat.count < 10 ? '0' + stat.count : stat.count}">01</span>
+                        <span th:text="${practice}">말씀을 통한 변화와 성장</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 </section>
 
-<section class="info-section">
+<!-- 홍보 영상 섹션 -->
+<section id="video" class="promo-video">
+    <div class="promo-container fade-in">
+        <h2>교회 소개 영상</h2>
+        <div class="video-wrapper">
+            <!-- 관리자 설정에서 가져온 영상 URL 사용 -->
+            <iframe th:src="${churchSetting.promoVideoUrl}"
+                    title="안디옥교회 소개 영상"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+        </div>
+        <div class="video-description">
+            <p>안디옥교회의 비전과 사역, 그리고 우리가 함께 걸어가는 신앙의 여정을 소개합니다. 하나님의 말씀으로 세워지는 교회, 사랑으로 섬기는 공동체를 함께 만들어가요.</p>
+        </div>
+    </div>
+</section>
+
+<section id="info" class="info-section">
     <div class="cards-container">
-        <div class="card">
+        <div class="card time-card fade-in">
             <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="12" cy="12" r="10"/>
                 <polyline points="12 6 12 12 16 14"/>
@@ -246,45 +701,242 @@
             <p>수요예배:[동계]오후 6:00 /[하계]오후 7:00 </p>
             <p>새벽기도: 오전 4:30</p>
         </div>
-        <div class="card">
+        <div class="card location-card fade-in">
             <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
                 <circle cx="12" cy="10" r="3"/>
             </svg>
             <h3>오시는 길</h3>
-            <p>London, UK</p>
-            <p>지하철 ○○역 ○번 출구</p>
+            <p>전라남도, 해남</p>
+            <p>풍혈길 300 안디옥 교회</p>
         </div>
-        <div class="card">
+        <div class="card contact-card fade-in">
             <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
             </svg>
             <h3>연락처</h3>
-            <p>전화: 020-XXXX-XXXX</p>
-            <p>이메일: info@church.org</p>
+            <p>전화: 061-053-0993</p>
+            <p>이메일: insa5457@gmail.com</p>
         </div>
     </div>
 </section>
 
-
-
-    <div th:replace="~{footer/footer.html}"></div>
-
+<div th:replace="~{footer/footer.html}"></div>
 
 <script>
-    // Smooth Scroll for Navigation Links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const section = document.querySelector(this.getAttribute('href'));
-            if (section) {
-                section.scrollIntoView({
-                    behavior: 'smooth'
-                });
-                // Close mobile menu after clicking
-                navLinks.classList.remove('active');
+    // 슬라이드 관련 변수
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const indicators = document.querySelectorAll('.indicator');
+    const totalSlides = slides.length;
+    let slideInterval;
+
+    // 드래그 관련 변수
+    let isDragging = false;
+    let startPos = 0;
+    let currentTranslate = 0;
+    let prevTranslate = 0;
+    let animationID = 0;
+    let dragThreshold = 100; // 슬라이드 전환을 위한 드래그 거리 임계값
+
+    // 슬라이드 표시 함수
+    function showSlide(n) {
+        // 모든 슬라이드 비활성화
+        slides.forEach(slide => {
+            slide.classList.remove('active');
+        });
+
+        // 모든 인디케이터 비활성화
+        indicators.forEach(indicator => {
+            indicator.classList.remove('active');
+        });
+
+        // 현재 슬라이드와 인디케이터 활성화
+        slides[n].classList.add('active');
+        indicators[n].classList.add('active');
+    }
+
+    // 다음 슬라이드로 이동
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        showSlide(currentSlide);
+    }
+
+    // 이전 슬라이드로 이동
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+        showSlide(currentSlide);
+    }
+
+    // 특정 슬라이드로 직접 이동 (인디케이터 클릭용)
+    function setSlide(n) {
+        currentSlide = n;
+        showSlide(currentSlide);
+
+        // 자동 슬라이드 타이머 재설정
+        resetTimer();
+    }
+
+    // 타이머 재설정
+    function resetTimer() {
+        clearInterval(slideInterval);
+        slideInterval = setInterval(nextSlide, 5000);
+    }
+
+    // 자동 슬라이드쇼 시작
+    function startSlideshow() {
+        slideInterval = setInterval(nextSlide, 5000); // 5초마다 슬라이드 전환
+    }
+
+    // 드래그 이벤트 핸들러
+    function touchStart(event) {
+        // 마우스 왼쪽 버튼만 감지 (0은 좌클릭)
+        if (event.type === 'mousedown' && event.button !== 0) return;
+
+        isDragging = true;
+        startPos = getPositionX(event);
+
+        // 애니메이션 중지
+        cancelAnimationFrame(animationID);
+
+        // 자동 슬라이드 일시 중지
+        clearInterval(slideInterval);
+
+        // 드래그 중 텍스트 선택 방지
+        event.preventDefault();
+    }
+
+    function touchMove(event) {
+        if (isDragging) {
+            const currentPosition = getPositionX(event);
+            currentTranslate = prevTranslate + currentPosition - startPos;
+        }
+    }
+
+    function touchEnd() {
+        isDragging = false;
+
+        // 드래그 거리를 기준으로 슬라이드 전환 결정
+        const movedBy = currentTranslate - prevTranslate;
+
+        // 오른쪽으로 충분히 드래그했을 때 이전 슬라이드로
+        if (movedBy > dragThreshold) {
+            prevSlide();
+        }
+        // 왼쪽으로 충분히 드래그했을 때 다음 슬라이드로
+        else if (movedBy < -dragThreshold) {
+            nextSlide();
+        }
+
+        // 변수 초기화
+        currentTranslate = 0;
+        prevTranslate = 0;
+
+        // 자동 슬라이드 재시작
+        resetTimer();
+    }
+
+    function getPositionX(event) {
+        return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
+    }
+
+    // 스크롤시 현재 섹션 감지 및 네비게이션 업데이트
+    function checkCurrentSection() {
+        const sections = document.querySelectorAll('#hero, #welcome, #video, #info');
+        const navLinks = document.querySelectorAll('.section-nav a');
+
+        let currentSectionIndex = 0;
+        const scrollPosition = window.scrollY;
+
+        // 현재 보이는 섹션 찾기
+        sections.forEach((section, index) => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.offsetHeight;
+
+            if (scrollPosition >= sectionTop - window.innerHeight/3 &&
+                scrollPosition < sectionTop + sectionHeight - window.innerHeight/3) {
+                currentSectionIndex = index;
             }
         });
+
+        // 네비게이션 업데이트
+        navLinks.forEach((link, index) => {
+            link.classList.toggle('active', index === currentSectionIndex);
+        });
+
+        // 애니메이션 요소 체크
+        checkFadeElements();
+    }
+
+    // 화면에 보이는 요소에 애니메이션 적용
+    function checkFadeElements() {
+        const fadeElements = document.querySelectorAll('.fade-in');
+        const triggerBottom = window.innerHeight * 0.8;
+
+        fadeElements.forEach(element => {
+            const elementTop = element.getBoundingClientRect().top;
+
+            if (elementTop < triggerBottom) {
+                element.classList.add('visible');
+            }
+        });
+    }
+
+    // 디바운스 함수 (스크롤 이벤트 최적화)
+    function debounce(func, wait = 10, immediate = true) {
+        let timeout;
+        return function() {
+            const context = this, args = arguments;
+            const later = function() {
+                timeout = null;
+                if (!immediate) func.apply(context, args);
+            };
+            const callNow = immediate && !timeout;
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+            if (callNow) func.apply(context, args);
+        };
+    }
+
+    // 페이지 로드 시 초기화
+    document.addEventListener('DOMContentLoaded', function() {
+        const heroContainer = document.querySelector('.hero-container');
+
+        // 드래그 이벤트 등록 (마우스)
+        heroContainer.addEventListener('mousedown', touchStart);
+        heroContainer.addEventListener('mousemove', touchMove);
+        heroContainer.addEventListener('mouseup', touchEnd);
+        heroContainer.addEventListener('mouseleave', touchEnd);
+
+        // 드래그 이벤트 등록 (터치)
+        heroContainer.addEventListener('touchstart', touchStart);
+        heroContainer.addEventListener('touchmove', touchMove);
+        heroContainer.addEventListener('touchend', touchEnd);
+
+        // 스크롤과 드래그의 충돌 방지
+        heroContainer.addEventListener('wheel', function(e) {
+            e.stopPropagation();
+        });
+
+        // 스크롤 이벤트 등록
+        window.addEventListener('scroll', debounce(checkCurrentSection));
+
+        // 섹션 네비게이션 클릭 이벤트
+        document.querySelectorAll('.section-nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                document.querySelector(targetId).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // 슬라이드쇼 시작
+        startSlideshow();
+
+        // 초기 체크
+        checkCurrentSection();
     });
 
     // Navbar Background Change on Scroll

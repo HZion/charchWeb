@@ -2,7 +2,16 @@
 <nav class="navbar">
     <div class="nav-container">
         <div class="logo"> <a class="logo"  th:href="@{/}">안디옥교회</a></div>
-        <button class="mobile-menu-btn">☰</button>
+
+
+        <button class="mobile-menu-btn hamburger-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+
         <div class="mobile-menu">
             <div class="accordion-menu">
                 <div class="menu-section" th:class="${currentPage == 'about'} ? 'menu-section active' : 'menu-section'">
@@ -47,7 +56,6 @@
                         <a href="/news?menu=events">교회행사</a>
                     </div>
                 </div>
-
             </div>
         </div>
         <div class="nav-links">
@@ -55,12 +63,34 @@
             <a href="#" th:href="@{/worship}">예배안내</a>
             <a href="#" th:href="@{/sermon}">설교말씀</a>
             <a href="#" th:href="@{/news}">교회소식</a>
-
         </div>
     </div>
 </nav>
 
 <style>
+    .mobile-menu-btn {
+        display: none;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 5px;
+        transition: all 0.3s ease;
+        color: #1e40af; /* 교회 로고 색상과 맞춤 */
+    }
+
+    .mobile-menu-btn:hover {
+        opacity: 0.8;
+    }
+
+    /* 두 개의 아이콘 스타일 설정 */
+    .mobile-menu-btn.hamburger-icon {
+        display: none;
+    }
+
+    .mobile-menu-btn.dots-icon {
+        display: none;
+    }
+
     /* PC 화면에서는 모바일 메뉴 숨김 */
     .mobile-menu {
         display: none;
@@ -69,6 +99,11 @@
     @media (max-width: 768px) {
         .nav-links {
             display: none;
+        }
+
+
+        .mobile-menu-btn.hamburger-icon {
+            display: block;
         }
 
         .mobile-menu {
@@ -143,13 +178,19 @@
 </style>
 
 <script>
-    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const mobileMenuBtns = document.querySelectorAll('.mobile-menu-btn');
     const mobileMenu = document.querySelector('.mobile-menu');
     const menuSections = document.querySelectorAll('.menu-section');
 
-    // 모바일 메뉴 토글
-    mobileMenuBtn.addEventListener('click', () => {
-        mobileMenu.classList.toggle('active');
+    // 모든 모바일 메뉴 버튼에 이벤트 리스너 추가
+    mobileMenuBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+
+            // 화면 스크롤 방지 (모바일 메뉴 열렸을 때)
+            document.body.style.overflow =
+                mobileMenu.classList.contains('active') ? 'hidden' : '';
+        });
     });
 
     // 각 섹션 헤더 클릭 이벤트
@@ -175,12 +216,6 @@
                 arrow.textContent = '▼';
             }
         });
-    });
-
-    // 화면 스크롤 방지 (모바일 메뉴 열렸을 때)
-    mobileMenuBtn.addEventListener('click', () => {
-        document.body.style.overflow =
-            mobileMenu.classList.contains('active') ? 'hidden' : '';
     });
 
     // 모바일 메뉴 외부 클릭 시 닫기
