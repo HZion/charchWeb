@@ -3,7 +3,7 @@
 
 
 <p>
- <img width='50%' height='50% src ='https://github.com/user-attachments/assets/c351849f-f9eb-4e25-a419-c52ca1324828'>
+ <img width='720' height='720' src ='https://github.com/user-attachments/assets/c351849f-f9eb-4e25-a419-c52ca1324828'>
 </p>
   
 <aside>
