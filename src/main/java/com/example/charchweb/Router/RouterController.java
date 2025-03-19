@@ -182,7 +182,7 @@ public class RouterController {
         );
         model.addAttribute("subMenus", subMenus);
 
-        return "sermonDetail";
+        return "sermondetail";
     }
 
     @GetMapping("/news")

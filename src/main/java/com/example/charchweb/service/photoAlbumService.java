@@ -152,7 +152,7 @@ public class photoAlbumService {
 
     // 다음 앨범 조회
     @Transactional(readOnly = true)
-    public photoAlbum getNextAlbum(LocalDateTime currentDate, Long currentId) {
+    public photoAlbum getNextAlbum(LocalDate currentDate, Long currentId) {
         // 1. 같은 날짜의 다음 ID 앨범을 찾음
         Optional<photoAlbum> sameDay = photoAlbumRepository
                 .findFirstByEventDateEqualsAndIdGreaterThanOrderByIdAsc(currentDate, currentId);
@@ -167,7 +167,7 @@ public class photoAlbumService {
 
     // 이전 앨범 조회
     @Transactional(readOnly = true)
-    public photoAlbum getPreviousAlbum(LocalDateTime currentDate, Long currentId) {
+    public photoAlbum getPreviousAlbum(LocalDate currentDate, Long currentId) {
         Optional<photoAlbum> sameDay = photoAlbumRepository.findFirstByEventDateEqualsAndIdLessThanOrderByIdDesc(currentDate,currentId);
         if(sameDay.isPresent()) {
             return sameDay.get();

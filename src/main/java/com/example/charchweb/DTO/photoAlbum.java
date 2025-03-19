@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -31,7 +32,8 @@ public class photoAlbum {
     private String description;
 
     @Column(nullable = false)
-    private LocalDateTime eventDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate  eventDate;
 
     private String category;
 

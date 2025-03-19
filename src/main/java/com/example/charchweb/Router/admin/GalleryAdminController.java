@@ -16,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -87,7 +86,7 @@ public class GalleryAdminController {
     @GetMapping("/album/add")
     public String albumAddForm(Model model) {
         photoAlbum album = new photoAlbum();
-        album.setEventDate(LocalDateTime.now()); // 기본값으로 오늘 날짜 설정
+        album.setEventDate(LocalDate.now()); // 기본값으로 오늘 날짜 설정
 
         model.addAttribute("album", album);
         model.addAttribute("isNew", true);

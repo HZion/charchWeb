@@ -45,15 +45,15 @@ public interface photoAlbumRepository extends JpaRepository<photoAlbum, Long> {
 
     // 같은 날짜 내에서 ID가 더 작은 앨범 중 가장 큰 ID를 가진 앨범
     Optional<photoAlbum> findFirstByEventDateEqualsAndIdLessThanOrderByIdDesc(
-            LocalDateTime eventDate, Long id);
+            LocalDate eventDate, Long id);
 
     // 같은 날짜 내에서 ID가 더 큰 앨범 중 가장 작은 ID를 가진 앨범
     Optional<photoAlbum> findFirstByEventDateEqualsAndIdGreaterThanOrderByIdAsc(
-            LocalDateTime eventDate, Long id);
+            LocalDate eventDate, Long id);
 
     // 다음 날짜의 앨범들 중 가장 가까운 날짜의 가장 작은 ID를 가진 앨범
-    photoAlbum findFirstByEventDateAfterAndIdGreaterThanOrderByEventDateAscIdAsc(LocalDateTime eventDate,Long currentId);
+    photoAlbum findFirstByEventDateAfterAndIdGreaterThanOrderByEventDateAscIdAsc(LocalDate eventDate,Long currentId);
 
     // 이전 날짜의 앨범들 중 가장 최근 날짜의 가장 큰 ID를 가진 앨범
-    photoAlbum findFirstByEventDateBeforeAndIdLessThanOrderByEventDateDescIdDesc(LocalDateTime currentDate, Long currentId);
+    photoAlbum findFirstByEventDateBeforeAndIdLessThanOrderByEventDateDescIdDesc(LocalDate currentDate, Long currentId);
 }
