@@ -1,8 +1,10 @@
 ## 프로젝트 상세내용
 **시연영상**
 
-</div>![bandicam 2025-03-19 16-42-18-941](https://github.com/user-attachments/assets/c351849f-f9eb-4e25-a419-c52ca1324828)
 
+<p>
+ <img src ='https://github.com/user-attachments/assets/c351849f-f9eb-4e25-a419-c52ca1324828>
+</p>
 <aside>
 **사용 기술 스택**
 
