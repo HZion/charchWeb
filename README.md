@@ -107,7 +107,8 @@ postSQL
 
 <aside>
 DB Table
-![image](https://github.com/user-attachments/assets/e0bf17fa-44f8-447c-95cd-7212301b3ee6)
+![image](https://github.com/user-attachments/assets/e3383ad2-0feb-445b-881f-ea7a4a9e2239)
+
 
 - 설교 테이블
     
