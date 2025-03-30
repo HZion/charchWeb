@@ -304,11 +304,11 @@
             <h2 class="sermon-related-title">관련 설교</h2>
             <div class="sermon-related-list">
                 <div class="sermon-related-item" th:each="relatedSermon : ${relatedSermons}">
-                    <img th:if="${relatedSermon.thumbnailUrl != null}"
-                         th:src="${relatedSermon.thumbnailUrl}"
+                    <img th:if="${#strings.isEmpty(relatedSermon.thumbnailUrl)}"
+                         th:src="@{/img/semon_thumbnail.png}"
                          alt="관련 설교 썸네일">
                     <img th:unless="${relatedSermon.thumbnailUrl != null}"
-                         th:src="@{/img/semon_thumbnail.png}"
+                         th:src="${relatedSermon.thumbnailUrl}"
                          alt="관련 설교 썸네일">
                     <div class="sermon-related-content">
                         <a th:href="@{/sermon/{id}(id=${relatedSermon.id})}"

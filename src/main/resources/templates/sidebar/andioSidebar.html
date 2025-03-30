@@ -5,18 +5,29 @@
 
     <nav class="andio-menu">
         <a href="/andio">대시보드</a>
-<!--        <a href="/andio/worship">예배 관리</a>-->
+        <!--        <a href="/andio/worship">예배 관리</a>-->
         <a href="/andio/settings">홈화면 관리</a>
         <a href="/andio/sermon" >설교 관리</a>
         <a href="/andio/notice">공지 관리</a>
         <a href="/andio/gallery">사진 관리</a>
-
     </nav>
 
     <form th:action="@{/andio/logout}" method="post">
         <button type="submit" class="logout-btn">로그아웃</button>
     </form>
 </aside>
+
+<!-- 토글 버튼 추가 -->
+<button id="sidebar-toggle" class="sidebar-toggle-btn">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+</button>
+
+<!-- 사이드바 오버레이 추가 -->
+<div id="sidebar-overlay" class="sidebar-overlay"></div>
 
 <style>
     * {
@@ -39,6 +50,8 @@
         padding: 1.5rem;
         height: 100vh;
         position: fixed;
+        transition: transform 0.3s ease-in-out;
+        z-index: 1000;
     }
 
     .andio-header {
@@ -68,13 +81,10 @@
         background: rgba(255,255,255,0.2);
     }
 
-
     .dashboard-card h3 {
         color: #1e40af;
         margin-bottom: 1rem;
     }
-
-
 
     .logout-btn {
         position: absolute;
@@ -93,4 +103,110 @@
     .logout-btn:hover {
         background: rgba(255,255,255,0.2);
     }
+
+    /* 토글 버튼 스타일 */
+    .sidebar-toggle-btn {
+        display: none; /* 기본적으로 숨김 */
+        position: fixed;
+        top: 1rem;
+        left: 1rem;
+        background: #1e40af;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+        z-index: 1001;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    /* 모바일 화면에서 사이드바 및 토글 버튼 스타일 */
+    @media (max-width: 768px) {
+        .andio-sidebar {
+            transform: translateX(-100%); /* 기본적으로 숨김 */
+            width: 250px;
+        }
+
+        .andio-sidebar.active {
+            transform: translateX(0); /* 활성화되면 표시 */
+        }
+
+        .sidebar-toggle-btn {
+            display: flex; /* 모바일에서 토글 버튼 표시 */
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 메인 콘텐츠 영역 조정 */
+        .andio-main {
+            margin-left: 0 !important;
+            width: 100% !important;
+            padding: 1rem !important;
+            padding-top: 4rem !important; /* 토글 버튼 공간 확보 */
+        }
+
+        /* 사이드바가 활성화되었을 때 오버레이 */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+    }
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebar = document.querySelector('.andio-sidebar');
+        const toggleBtn = document.getElementById('sidebar-toggle');
+        const overlay = document.getElementById('sidebar-overlay');
+
+        // 페이지 로드 시 모바일 여부 확인하여 클래스 적용
+        checkMobile();
+
+        // 토글 버튼 클릭 이벤트
+        toggleBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        });
+
+        // 오버레이 클릭 시 사이드바 숨김
+        overlay.addEventListener('click', function() {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        // 메뉴 아이템 클릭 시 모바일에서 사이드바 닫기
+        const menuItems = document.querySelectorAll('.andio-menu a');
+        menuItems.forEach(item => {
+            item.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                }
+            });
+        });
+
+        // 화면 크기 변경 시 모바일 여부 확인
+        window.addEventListener('resize', checkMobile);
+
+        // 모바일 화면 여부 확인 함수
+        function checkMobile() {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            } else {
+                sidebar.classList.add('active');
+            }
+        }
+    });
+</script>

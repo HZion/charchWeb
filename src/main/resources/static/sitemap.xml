@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<!-- 메인 페이지 -->
+    <url>
+        <loc>https://haenam-andio.site/</loc>
+        <lastmod>2025-03-19</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+
+<!-- 교회 소개 페이지 -->
+<url>
+    <loc>https://haenam-andio.site/about</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+</url>
+<url>
+    <loc>https://haenam-andio.site/about?menu=pastors</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+</url>
+<url>
+    <loc>https://haenam-andio.site/about?menu=mission</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+</url>
+<url>
+    <loc>https://haenam-andio.site/about?menu=location</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+</url>
+
+<!-- 예배 안내 페이지 -->
+<url>
+    <loc>https://haenam-andio.site/worship</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+</url>
+<url>
+    <loc>https://haenam-andio.site/worship?menu=times</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+</url>
+
+<!-- 설교 페이지 -->
+<url>
+    <loc>https://haenam-andio.site/sermon</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+</url>
+<url>
+    <loc>https://haenam-andio.site/sermon?menu=recent</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+</url>
+<url>
+    <loc>https://haenam-andio.site/sermon?menu=archive</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+</url>
+
+<!-- 교회 소식 페이지 -->
+<url>
+    <loc>https://haenam-andio.site/news</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+</url>
+<url>
+    <loc>https://haenam-andio.site/news?menu=notice</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+</url>
+<url>
+    <loc>https://haenam-andio.site/news?menu=gallery</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+</url>
+</urlset>

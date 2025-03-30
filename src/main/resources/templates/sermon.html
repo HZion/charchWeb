@@ -332,6 +332,65 @@
             font-size: 1.05rem;
             margin-bottom: 1rem;
         }
+
+        /* 모바일에서는 테이블을 숨기고 카드 레이아웃 표시 */
+        @media (max-width: 768px) {
+            /* 기존 테이블 숨기기 */
+            .sermon-table {
+                display: none;
+            }
+
+            /* 모바일용 카드 컨테이너 표시 */
+            .sermon-cards-mobile {
+                display: block;
+            }
+        }
+
+        /* 데스크톱에서는 카드 레이아웃 숨기고 테이블 표시 */
+        @media (min-width: 769px) {
+            .sermon-cards-mobile {
+                display: none;
+            }
+        }
+
+        /* 모바일용 카드 스타일 */
+        .sermon-card-mobile {
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .sermon-card-mobile-date {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .sermon-card-mobile-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 0.8rem;
+            color: #1e40af;
+        }
+
+        .sermon-card-mobile-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+
+        .sermon-card-mobile-info span {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .sermon-card-mobile-info span strong {
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
@@ -453,7 +512,23 @@
                 </tr>
                 </tbody>
             </table>
-
+            <!-- 모바일용 설교 테이블  -->
+            <div class="sermon-cards-mobile">
+                <div class="sermon-card-mobile" th:each="sermon : ${sermonsPage.content}">
+                    <div class="sermon-card-mobile-date" th:text="${#dates.format(sermon.date, 'yyyy.MM.dd')}">2025.03.30</div>
+                    <a th:href="@{/sermon/{id}(id=${sermon.id})}" class="sermon-card-mobile-title" th:text="${sermon.title}">설교 제목</a>
+                    <div class="sermon-card-mobile-info">
+            <span>
+                <strong>설교자:</strong>
+                <span th:text="${sermon.preacher}">하용환 목사</span>
+            </span>
+                        <span>
+                <strong>성경구절:</strong>
+                <span th:text="${sermon.bibleVerse}">요한복음 4장1절~15절</span>
+            </span>
+                    </div>
+                </div>
+            </div>
             <!-- 페이지네이션 -->
             <ul class="pagination" th:if="${sermonsPage.totalPages > 1}">
                 <!-- 이전 버튼 -->

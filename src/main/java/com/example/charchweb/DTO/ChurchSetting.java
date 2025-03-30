@@ -14,10 +14,10 @@ public class ChurchSetting {
         // Default values
         this.motto = "이끄심과 나타내심";
         this.practices = new ArrayList<>();
-        this.practices.add("말씀을 통한 변화와 성장");
-        this.practices.add("기도로 하나님과 깊은 교제");
-        this.practices.add("이웃을 향한 섬김과 나눔");
-        this.practices.add("복음 전파를 통한 하나님 나라 확장");
+        this.practices.add("하나님의 의와 거룩함을 사모하라");
+        this.practices.add("말씀과 기도의 능력 안에 채우라");
+        this.practices.add("구령의 열정으로 외치라");
+        this.practices.add("변화와 성숙을 기대하라");
 
         // 기본 홍보 영상 URL
         this.promoVideoUrl = "https://www.youtube.com/embed/qvRizocqDsk?si=q0-D61KzQAXRyyVl";
@@ -25,7 +25,7 @@ public class ChurchSetting {
         // 기본 슬라이드 내용 (버튼 없음)
         this.slides = new ArrayList<>();
         this.slides.add(new SlideContent("변화와 성숙", "하나님의 백성으로서의 삶"));
-        this.slides.add(new SlideContent("믿음과 소망, 사랑으로", "모든 세대가 함께 성장하는 안디옥교회"));
+        this.slides.add(new SlideContent("이끄심...나타내심", "모든 세대가 함께 성장하는 교회"));
         this.slides.add(new SlideContent("말씀으로 세워지는 교회", "복음의 진리를 통해 변화되는 새로운 삶"));
     }
 

@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /andio/
+Allow: /
+Sitemap: https://haenam-andio.site/sitemap.xml
